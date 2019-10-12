@@ -26,10 +26,17 @@ ipl:
 
         mov [BOOT.DRIVE], dl
 
-        mov al, 'A'
-        mov ah, 0x0E
-        mov bx, 0x0000
-        int 0x10
+        push word 'A'
+        call putc
+        add sp, 2      ; スタックを戻す
+
+        push word 'B'
+        call putc
+        add sp, 2     
+
+        push word 'C'
+        call putc
+        add sp, 2     
         
         jmp $
 
@@ -38,8 +45,11 @@ BOOT:
 .DRIVE:
         dw 0
 
+%include "modules/real/putc.s"
+
 ;********************************************************************************
 ; ブートフラグ
 ;********************************************************************************
         times 510 - ($-$$) db 0x00
         db 0x55, 0xAA
+
