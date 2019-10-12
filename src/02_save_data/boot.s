@@ -24,6 +24,7 @@ ipl:
         mov sp, BOOT_LOAD
         sti
 
+        mov [BOOT.DRIVE], dl
         jmp $
 
 ALIGN 2, db 0
