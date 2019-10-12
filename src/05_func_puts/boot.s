@@ -28,18 +28,18 @@ ipl:
 
         mov [BOOT.DRIVE], dl
 
-        cdecl putc, word 'X'
-        cdecl putc, word 'Y'
-        cdecl putc, word 'Z'   
+        cdecl puts, .s0
         
         jmp $
 
+.s0:
+        db "Booting...", 0x0A, 0x0D, 0        
 ALIGN 2, db 0
 BOOT:
 .DRIVE:
         dw 0
 
-%include "modules/real/putc.s"
+%include "modules/real/puts.s"
 
 ;********************************************************************************
 ; ブートフラグ
