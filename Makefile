@@ -4,6 +4,8 @@ VM := qemu-system-i386
 SRC_DIR := src
 OUT_DIR := _build
 
+ASM_SEARCH_PATH := $(SRC_DIR)
+
 PROGRAM := $(OUT_DIR)/boot.img
 PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 
@@ -11,8 +13,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_02
+run: src_03
 	$(VM) -monitor stdio $(PROGRAM)
+
+.PHONY: src_03
+src_03:
+	$(ASM) $(SRC_DIR)/03_boot_putc/boot.s -I$(ASM_SEARCH_PATH) -o $(PROGRAM) -l $(PROGRAM_LIST) 
 
 .PHONY: src_02
 src_02:
