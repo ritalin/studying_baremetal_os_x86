@@ -36,7 +36,7 @@ itoa:
         jne .SIGN_TEST_END
         mov bx, [bp + 12]
         test bx, 0b0001
-        jne .SIGN_TEST_END                ; unsigned
+        je .SIGN_TEST_END                ; unsigned
         cmp ax, 0
         jge .SIGN_TEST_POSITIVE
         neg ax
