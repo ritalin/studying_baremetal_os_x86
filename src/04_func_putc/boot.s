@@ -12,6 +12,8 @@ entry:
 ;********************************************************************************
         times 90 - ($-$$) db 0x90 ; nop
 
+%include "include/macro.s"
+
 ;********************************************************************************
 ; Initial Program Loader
 ;********************************************************************************
@@ -26,17 +28,9 @@ ipl:
 
         mov [BOOT.DRIVE], dl
 
-        push word 'A'
-        call putc
-        add sp, 2      ; スタックを戻す
-
-        push word 'B'
-        call putc
-        add sp, 2     
-
-        push word 'C'
-        call putc
-        add sp, 2     
+        cdecl putc, word 'X'
+        cdecl putc, word 'Y'
+        cdecl putc, word 'Z'   
         
         jmp $
 
