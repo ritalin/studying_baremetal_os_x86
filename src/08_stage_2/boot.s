@@ -1,7 +1,11 @@
 ;********************************************************************************
-; 何もしないブートプログラム
+; ブートローダ
 ;********************************************************************************
 BOOT_LOAD equ 0x7c00
+BOOT_SIZE equ (1024 * 8)
+SECT_SIZE equ (512)
+BOOT_SECT equ (BOOT_SIZE / SECT_SIZE)
+
 ORG BOOT_LOAD
 
 entry:
@@ -26,19 +30,18 @@ ipl:
         mov sp, BOOT_LOAD
         sti
 
-        mov [BOOT.DRIVE], dl
+        mov [BOOT + drive.no], dl
 
         cdecl puts, .s0
 
         ; ** 第2ステージのロード **
-        mov ah, 0x02            ; 読み込み命令
-        mov al, 1               ; 読み込みセクタ数
-        mov cx, 0x0002          ; シリンダ / セクタ位置
-        mov dh, 0x00            ; ヘッド位置
-        mov dl, [BOOT.DRIVE]    ; ドライブ番号
-        mov bx, BOOT_LOAD + 512 ; 展開先アドレス
-        int 0x13
-        jnc .LOAD_2ND_STAGE_SUCCESS
+        mov bx, BOOT_SECT-1             ; 読み込むセクタ数
+        mov cx, BOOT_LOAD + SECT_SIZE   ; 展開先アドレス
+        cdecl read_chs, BOOT, bx, cx
+
+        cmp ax, bx                      ; 指定したセクタ数を読み込んだかどうか
+        jz .LOAD_2ND_STAGE_SUCCESS   
+
         cdecl puts, .err0
         cdecl reboot            ; 再起動
 .LOAD_2ND_STAGE_SUCCESS:
@@ -49,11 +52,16 @@ ipl:
 
 ALIGN 2, db 0
 BOOT:
-.DRIVE:
-        dw 0
+        istruc drive      
+            at drive.no,   dw 0
+            at drive.cyln, dw 0
+            at drive.head, dw 0
+            at drive.sect, dw 2
+        iend
 
 %include "modules/real/puts.s"
 %include "modules/real/reboot.s"
+%include "modules/real/read_chs.s"
 
 ;********************************************************************************
 ; ブートフラグ
@@ -74,6 +82,6 @@ stage2:
 ;********************************************************************************
 ; パディング(8kB)
 ;********************************************************************************
-        times (1024 * 8) - ($-$$) db 0x00
+        times BOOT_SIZE - ($-$$) db 0x00
 
 
