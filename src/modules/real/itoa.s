@@ -34,6 +34,9 @@ itoa:
         cmp cx, 0
         je .PADDING_END
 
+        mov al, ' '
+        cmp [bp + 12], word 0b0010
+        jne .PADDING_BEGIN
         mov al, '0'
 .PADDING_BEGIN:        
         std                     ; DF = 1
