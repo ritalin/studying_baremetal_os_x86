@@ -31,14 +31,24 @@ ipl:
         ; ** 文字列表示 **
         cdecl puts, .s0
 
-        ; ** 数値表示 **
+        ; ** 数値表示(10進数) **
         cdecl itoa, 0, .s1, 8, 10, 0b0000
         cdecl puts, .s1
         cdecl itoa, 8086, .s1, 8, 10, 0b0000
         cdecl puts, .s1
         cdecl itoa, 8086, .s1, 8, 10, 0b0010
         cdecl puts, .s1
-        cdecl itoa, 8086, .s1, 8, 10, 0b0010
+
+        ; ** 数値表示(16進数) **
+        cdecl itoa, -1, .s1, 8, 16, 0b0010
+        cdecl puts, .s1
+
+        ; ** 数値表示(2進数) **
+        cdecl itoa, 12, .s1, 8, 2, 0b0000
+        cdecl puts, .s1
+
+        ; ** 数値表示(8進数) **
+        cdecl itoa, 9, .s1, 8, 8, 0b0000
         cdecl puts, .s1
 
         jmp $

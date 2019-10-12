@@ -31,7 +31,7 @@ itoa:
     
     ; ** 基数変換 **
 .TO_ASCII:
-        mov bx, 10
+        mov bx, [bp + 10]   ; 基数
         cmp ax, 0
         jne .TO_ASCII_BEGIN
         mov si, 0
@@ -77,4 +77,4 @@ rep     stosb                   ; while (--CX) { *DI-- = AL }
         ret
 
 .ascii:
-    db "01234567890ABCDEF"
+    db "0123456789ABCDEF"
