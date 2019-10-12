@@ -82,10 +82,29 @@ stage2:
         cdecl puts, .err0
         cdecl reboot            ; 再起動
 .BOOT_PARAM_FOUND:
+        
+        ; ** ドライブパラメータの表示
+        mov ax, [BOOT + drive.no]
+        cdecl itoa, ax, .p1, 2, 16, 0b0010
+        mov ax, [BOOT + drive.cyln]
+        cdecl itoa, ax, .p2, 4, 16, 0b0010
+        mov ax, [BOOT + drive.head]
+        cdecl itoa, ax, .p3, 2, 16, 0b0010
+        mov ax, [BOOT + drive.sect]
+        cdecl itoa, ax, .p4, 2, 16, 0b0010        
+        cdecl puts, .s1
 
         jmp $
 
 .s0:    db "2nd Stage...", 0x0A, 0x0D, 0 
+
+.s1:    db "  Drive:0x"
+.p1:    db "  , C:0x"
+.p2:    db "    , H:0x"
+.p3:    db "  , S:0x"
+.p4:    db "  "
+.p5:    db 0x0A, 0x0D, 0
+
 .err0:  db "Cannot get drive parameter.", 0x0A, 0x0D, 0
 
 ;********************************************************************************
