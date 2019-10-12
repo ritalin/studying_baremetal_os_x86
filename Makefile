@@ -11,8 +11,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_01
+run: src_02
 	$(VM) $(PROGRAM)
+
+.PHONY: src_02
+src_02:
+	$(ASM) $(SRC_DIR)/02_save_data/boot.s -o $(PROGRAM) -l $(PROGRAM_LIST) 
 
 .PHONY: src_01
 src_01:
