@@ -28,6 +28,26 @@ itoa:
         mov di, si       
         add di, cx       
         dec di              ; バッファ最後尾
+    
+    ; ** 基数変換 **
+.TO_ASCII:
+        mov bx, 10
+        cmp ax, 0
+        jne .TO_ASCII_BEGIN
+        mov si, 0
+        jmp .TO_ASCII_LOOP
+.TO_ASCII_BEGIN:
+        mov dx, 0
+        div bx                      ; DX = DX:AX % BX
+                                    ; AX = DX:AX / BX
+        mov si, dx
+        .TO_ASCII_LOOP:
+        mov dl, byte [.ascii + si]  ; DL = .ascii[DX]
+        mov [di], dl
+        dec di
+        cmp ax, 0
+        loopnz .TO_ASCII_BEGIN       
+.TO_ASCII_END:
 
     ; ** パディング **
 .PADDING:
@@ -40,7 +60,7 @@ itoa:
         mov al, '0'
 .PADDING_BEGIN:        
         std                     ; DF = 1
-rep     stosb                   ; while (--CX) { *DI = AL }
+rep     stosb                   ; while (--CX) { *DI-- = AL }
 .PADDING_END:
 
 ;**** レジスタの復帰 **** 

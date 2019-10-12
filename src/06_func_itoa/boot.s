@@ -32,15 +32,19 @@ ipl:
         cdecl puts, .s0
 
         ; ** 数値表示 **
-        cdecl itoa, 8086, .s1, 10, 10, 0b0000
+        cdecl itoa, 0, .s1, 8, 10, 0b0000
         cdecl puts, .s1
-        cdecl itoa, 8086, .s1, 10, 10, 0b0010
+        cdecl itoa, 8086, .s1, 8, 10, 0b0000
+        cdecl puts, .s1
+        cdecl itoa, 8086, .s1, 8, 10, 0b0010
+        cdecl puts, .s1
+        cdecl itoa, 8086, .s1, 8, 10, 0b0010
         cdecl puts, .s1
 
         jmp $
 
 .s0:    db "Booting...", 0x0A, 0x0D, 0  
-.s1:    db "----------", 0x0A, 0x0D, 0
+.s1:    db "--------", 0x0A, 0x0D, 0
 
 ALIGN 2, db 0
 BOOT:
