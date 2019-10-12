@@ -1,17 +1,18 @@
-ASM = nasm
+ASM := nasm
+VM := qemu-system-i386
 
-SRC_DIR = src
-OUT_DIR = _build
+SRC_DIR := src
+OUT_DIR := _build
 
-PROGRAM = $(OUT_DIR)/boot.img
-PROGRAM_LIST = $(patsubst %.img,%.list,$(PROGRAM))
+PROGRAM := $(OUT_DIR)/boot.img
+PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 
 .PHONY: all
 all: ;
 
 .PHONY: run
 run: src_00
-	qemu-system-i386 $(PROGRAM)
+	$(VM) $(PROGRAM)
 
 .PHONY: src_00
 src_00:
