@@ -13,8 +13,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_05
+run: src_06
 	$(VM) -monitor stdio $(PROGRAM)
+
+.PHONY: src_06
+src_06:
+	$(ASM) $(SRC_DIR)/06_func_itoa/boot.s -I$(ASM_SEARCH_PATH) -o $(PROGRAM) -l $(PROGRAM_LIST) 
 
 .PHONY: src_05
 src_05:
