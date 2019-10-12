@@ -89,9 +89,9 @@ stage2:
         mov ax, [BOOT + drive.cyln]
         cdecl itoa, ax, .p2, 4, 16, 0b0010
         mov ax, [BOOT + drive.head]
-        cdecl itoa, ax, .p3, 2, 16, 0b0010
+        cdecl itoa, ax, .p3, 3, 10, 0b0010
         mov ax, [BOOT + drive.sect]
-        cdecl itoa, ax, .p4, 2, 16, 0b0010        
+        cdecl itoa, ax, .p4, 3, 10, 0b0010        
         cdecl puts, .s1
 
         jmp $
@@ -100,8 +100,8 @@ stage2:
 
 .s1:    db "  Drive:0x"
 .p1:    db "  , C:0x"
-.p2:    db "    , H:0x"
-.p3:    db "  , S:0x"
+.p2:    db "   , H:"
+.p3:    db "   , S:"
 .p4:    db "  "
 .p5:    db 0x0A, 0x0D, 0
 
