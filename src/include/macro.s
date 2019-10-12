@@ -19,3 +19,8 @@ struc drive
     .head   resw 1  ; ヘッド位置
     .sect   resw 1  ; セクタ位置
 endstruc
+
+struc font
+    .seg    resw 1  
+    .off    resw 1
+endstruc

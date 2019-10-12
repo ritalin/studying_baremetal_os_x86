@@ -66,6 +66,15 @@ BOOT:
         times 510 - ($-$$) db 0x00
         db 0x55, 0xAA
 
+;********************************************************************************
+; フォント情報の格納先
+;********************************************************************************
+FONT:
+        istruc font
+            at font.seg, dw 0
+            at font.off, dw 0
+        iend
+
 %include "modules/real/itoa.s"
 %include "modules/real/get_drive_param.s"
 
@@ -102,10 +111,33 @@ stage2:
 .p1:    db "  , C:0x"
 .p2:    db "   , H:"
 .p3:    db "   , S:"
-.p4:    db "  "
+.p4:    db "   "
 .p5:    db 0x0A, 0x0D, 0
 
 .err0:  db "Cannot get drive parameter.", 0x0A, 0x0D, 0
+
+%include "modules/real/get_font_address.s"
+
+;********************************************************************************
+; Stage3
+;********************************************************************************
+stage_3:
+        cdecl puts, .s0
+
+        cdecl get_font_address, FONT
+
+        mov ax, [FONT + font.seg]
+        cdecl itoa, ax, .p1, 4, 16, 0b0010
+        mov ax, [FONT + font.off]
+        cdecl itoa, ax, .p2, 4, 16, 0b0010 
+        cdecl puts, .s1
+        jmp $
+
+.s0:    db "3rd stage...", 0x0A, 0x0D, 0
+.s1:    db "  Font address="
+.p1:    db "ZZZZ:"
+.p2:    db "ZZZZ"
+.p3:    db 0x0A, 0x0D, 0
 
 ;********************************************************************************
 ; パディング(8kB)
