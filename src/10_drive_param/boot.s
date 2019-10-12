@@ -102,7 +102,7 @@ stage2:
 .p1:    db "  , C:0x"
 .p2:    db "   , H:"
 .p3:    db "   , S:"
-.p4:    db "  "
+.p4:    db "   "
 .p5:    db 0x0A, 0x0D, 0
 
 .err0:  db "Cannot get drive parameter.", 0x0A, 0x0D, 0
