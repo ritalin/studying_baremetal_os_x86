@@ -16,6 +16,10 @@ all: ;
 run: src_11
 	$(VM) -monitor stdio $(PROGRAM)
 
+.PHONY: src_12
+src_12:
+	$(ASM) $(SRC_DIR)/12_get_mem_info/boot.s -I$(ASM_SEARCH_PATH) -o $(PROGRAM) -l $(PROGRAM_LIST) 
+
 .PHONY: src_11
 src_11:
 	$(ASM) $(SRC_DIR)/11_font_address/boot.s -I$(ASM_SEARCH_PATH) -o $(PROGRAM) -l $(PROGRAM_LIST) 

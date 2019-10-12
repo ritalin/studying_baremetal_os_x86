@@ -22,12 +22,10 @@ get_font_address:
         mov ax, 0x1130
         mov bh, 0x06
         int 10h             ; ES:BP <= フォントアドレス
-        
+
         ; ** フォントアドレスの保存 **
         mov [si + 0], es
         mov [si + 2], bp
-
-
         
 ;**** レジスタの復帰 **** 
         pop bp
