@@ -66,15 +66,27 @@ BOOT:
         times 510 - ($-$$) db 0x00
         db 0x55, 0xAA
 
+%include "modules/real/itoa.s"
+%include "modules/real/get_drive_param.s"
+
 ;********************************************************************************
 ; Stage2
 ;********************************************************************************
 stage2:
         cdecl puts, .s0
 
+        ; ** ドライブ情報を取得する
+        cdecl get_drive_param, BOOT
+        cmp ax, 0
+        jne .BOOT_PARAM_FOUND
+        cdecl puts, .err0
+        cdecl reboot            ; 再起動
+.BOOT_PARAM_FOUND:
+
         jmp $
 
 .s0:    db "2nd Stage...", 0x0A, 0x0D, 0 
+.err0:  db "Cannot get drive parameter.", 0x0A, 0x0D, 0
 
 ;********************************************************************************
 ; パディング(8kB)
