@@ -34,9 +34,11 @@ ipl:
         ; ** 数値表示(10進数) **
         cdecl itoa, 0, .s1, 8, 10, 0b0000
         cdecl puts, .s1
-        cdecl itoa, 8086, .s1, 8, 10, 0b0000
-        cdecl puts, .s1
         cdecl itoa, 8086, .s1, 8, 10, 0b0010
+        cdecl puts, .s1
+        cdecl itoa, -1, .s1, 8, 10, 0b0000
+        cdecl puts, .s1
+        cdecl itoa, -1, .s1, 8, 10, 0b0001
         cdecl puts, .s1
 
         ; ** 数値表示(16進数) **

@@ -3,7 +3,7 @@
 ;********************************************************************************
 itoa:
 ;**** スタックフレームの構築 **** 
-                            ;   +12| パディング方法(0: ' 'で埋める, 1: '0'で埋める), 数値型(0: signed, 1: unsigned)
+                            ;   +12| パディング方法(0: ' 'で埋める, 1: '0'で埋める), 数値型(0: unsigned, 1: signed)
                             ;   +10| 基数(2, 8, 10, 16)
                             ;    +8| 保存先バッファサイズ
                             ;    +6| 保存先バッファ
@@ -21,14 +21,33 @@ itoa:
         push di
 
 ;**** 処理の開始 ****
-        mov ax, [bp + 4]    ; 数値
-        mov si, [bp + 6]    ; バッファ先頭
-        mov cx, [bp + 8]    ; バッファサイズ
+        mov ax, [bp + 4]            ; 数値
+        mov si, [bp + 6]            ; バッファ先頭
+        mov cx, [bp + 8]            ; バッファサイズ
 
         mov di, si       
         add di, cx       
-        dec di              ; バッファ最後尾
+        dec di                      ; バッファ最後尾
     
+    ; ** 数値の符号判定 **
+.SIGN_TEST:
+        mov bx, [bp + 10]
+        cmp bx, 10
+        jne .SIGN_TEST_END
+        mov bx, [bp + 12]
+        test bx, 0b0001
+        jne .SIGN_TEST_END                ; unsigned
+        cmp ax, 0
+        jge .SIGN_TEST_POSITIVE
+        neg ax
+        mov [si], byte '-'
+        jmp .SIGN_TEST_OFFSET
+.SIGN_TEST_POSITIVE:
+        mov [si], byte '+'
+.SIGN_TEST_OFFSET:
+        dec cx
+.SIGN_TEST_END:
+
     ; ** 基数変換 **
 .TO_ASCII:
         mov bx, [bp + 10]   ; 基数
