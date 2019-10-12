@@ -12,7 +12,7 @@ all: ;
 
 .PHONY: run
 run: src_02
-	$(VM) $(PROGRAM)
+	$(VM) -monitor stdio $(PROGRAM)
 
 .PHONY: src_02
 src_02:
