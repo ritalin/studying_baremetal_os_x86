@@ -13,8 +13,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_10
+run: src_11
 	$(VM) -monitor stdio $(PROGRAM)
+
+.PHONY: src_11
+src_11:
+	$(ASM) $(SRC_DIR)/11_font_address/boot.s -I$(ASM_SEARCH_PATH) -o $(PROGRAM) -l $(PROGRAM_LIST) 
 
 .PHONY: src_10
 src_10:
