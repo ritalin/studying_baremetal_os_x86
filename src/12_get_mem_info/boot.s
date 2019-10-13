@@ -139,14 +139,12 @@ stage_3:
 .MEM_MAP_BEGIN:
         cdecl get_mem_info, .MEMORY_MAP
 
-        cdecl itoa, word [.MEMORY_MAP + mem_map_buf.next+2], .t1, 5, 10, 0b0010
-        cdecl itoa, word [.MEMORY_MAP + mem_map_buf.next+0], .t2, 5, 10, 0b0010
-
-        cdecl puts, .t1
+mov eax, .MEMORY_MAP
+        cdecl put_mem_info, .MEMORY_MAP
 
         mov eax, [.MEMORY_MAP + mem_map_buf.next]
         cmp eax, 0
-;        jne .MEM_MAP_BEGIN
+        jne .MEM_MAP_BEGIN
 .MEM_MAP_END:
 
         cdecl put_mem_info_footer
