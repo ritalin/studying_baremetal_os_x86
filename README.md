@@ -6,3 +6,5 @@
     * brew install nasm
     * version: 2.14.02
 * ビルドはMakefileを介して行っている
+* 14.6のitoaのflag引数の処理の仕方がわからなかったため、意味づけを変更
+* 

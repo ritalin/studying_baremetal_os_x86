@@ -117,6 +117,7 @@ stage2:
 .err0:  db "Cannot get drive parameter.", 0x0A, 0x0D, 0
 
 %include "modules/real/get_font_address.s"
+%include "modules/real/get_mem_info.s"
 
 ;********************************************************************************
 ; Stage3
@@ -124,20 +125,50 @@ stage2:
 stage_3:
         cdecl puts, .s0
 
+        ; ** フォント情報の取得 **
         cdecl get_font_address, FONT
 
-        mov ax, [FONT + font.seg]
-        cdecl itoa, ax, .p1, 4, 16, 0b0010
-        mov ax, [FONT + font.off]
-        cdecl itoa, ax, .p2, 4, 16, 0b0010 
+        cdecl itoa, word [FONT + font.seg], .p1, 4, 16, 0b0010 
+        cdecl itoa, word [FONT + font.off], .p2, 4, 16, 0b0010 
         cdecl puts, .s1
+
+        ; ** メモリマップの取得 **
+        cdecl put_mem_info_header
+
+        mov [.MEMORY_MAP + mem_map_buf.next], dword 0
+.MEM_MAP_BEGIN:
+        cdecl get_mem_info, .MEMORY_MAP
+
+        cdecl itoa, word [.MEMORY_MAP + mem_map_buf.next+2], .t1, 5, 10, 0b0010
+        cdecl itoa, word [.MEMORY_MAP + mem_map_buf.next+0], .t2, 5, 10, 0b0010
+
+        cdecl puts, .t1
+
+        mov eax, [.MEMORY_MAP + mem_map_buf.next]
+        cmp eax, 0
+;        jne .MEM_MAP_BEGIN
+.MEM_MAP_END:
+
+        cdecl put_mem_info_footer
+
         jmp $
 
+.MEMORY_MAP:
+        istruc mem_map_buf
+            at mem_map_buf.addr, dw 0x0000, 0x0000, 0x0000, 0x0000
+            at mem_map_buf.len,  dw 0x0000, 0x0000, 0x0000, 0x0000
+            at mem_map_buf.type, dw 0x0000, 0x0000
+            at mem_map_buf.next, dw 0x0000, 0x0000
+        iend
+    
 .s0:    db "3rd stage...", 0x0A, 0x0D, 0
 .s1:    db "  Font address="
 .p1:    db "ZZZZ:"
 .p2:    db "ZZZZ"
 .p3:    db 0x0A, 0x0D, 0
+
+.t1:    db "     -"
+.t2:    db "     ", 0x0A, 0x0D, 0
 
 ;********************************************************************************
 ; パディング(8kB)

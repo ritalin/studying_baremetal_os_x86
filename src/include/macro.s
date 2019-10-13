@@ -24,3 +24,10 @@ struc font
     .seg    resw 1  
     .off    resw 1
 endstruc
+
+struc mem_map_buf
+    .addr   resw 4
+    .len    resw 4
+    .type   resw 2
+    .next   resw 2
+endstruc
