@@ -156,6 +156,7 @@ mov eax, .MEMORY_MAP
             at mem_map_buf.addr, dw 0x0000, 0x0000, 0x0000, 0x0000
             at mem_map_buf.len,  dw 0x0000, 0x0000, 0x0000, 0x0000
             at mem_map_buf.type, dw 0x0000, 0x0000
+            at mem_map_buf.acpi, dw 0x0000, 0x0000
             at mem_map_buf.next, dw 0x0000, 0x0000
         iend
     

@@ -20,6 +20,8 @@ get_mem_info:
 ;**** 処理の開始 ****
         mov di, [bp + 4]
         mov bp, 0
+        mov [di + mem_map_buf.acpi], dword 1
+
         mov eax, 0x0000_E820
         mov ebx, dword [di + mem_map_buf.next]
         mov ecx, MEMORY_MAP_LEN
@@ -31,6 +33,9 @@ get_mem_info:
         jc .END
 
         mov [di + mem_map_buf.next], dword ebx
+        cmp cl, 0x14
+        jne .END
+        mov [di + mem_map_buf.acpi], dword 0
 .END
 
 ;**** レジスタの復帰 **** 
@@ -71,7 +76,8 @@ put_mem_info_header:
 .s1:    db "Base____", "_", "________", " "
 .s2:    db "Length__", "_", "________", " "
 .s3:    db "Type____", " "
-.s4:    db 0x0A, 0x0D, 0
+.s4:    db "ACPI3.0_", " "
+.s5:    db 0x0A, 0x0D, 0
 
 ;********************************************************************************
 ; void put_mem_info(info_buf)
@@ -106,6 +112,10 @@ put_mem_info:
         cdecl itoa, word [si + mem_map_buf.type + 2], .s5 + 0, 4, 16, 0b0010
         cdecl itoa, word [si + mem_map_buf.type + 0], .s5 + 4, 4, 16, 0b0010
 
+        ; ** ACPIサポート **
+        cdecl itoa, word [si + mem_map_buf.acpi + 2], .s6 + 0, 4, 16, 0b0010
+        cdecl itoa, word [si + mem_map_buf.acpi + 0], .s6 + 4, 4, 16, 0b0010
+
         cdecl puts, .s1
 
         ; ** タイプ名 **
@@ -129,7 +139,8 @@ put_mem_info:
 .s3:    db "ZZZZZZZZ", "_"
 .s4:    db "ZZZZZZZZ", " "
 .s5:    db "ZZZZZZZZ", " "
-.s6:    db 0
+.s6:    db "ZZZZZZZZ", " "
+.s7:    db 0
 
 .t1:    db "(Unknown)", 0x0A, 0x0D, 0
 .t2:    db "(usable)", 0x0A, 0x0D, 0
@@ -163,4 +174,5 @@ put_mem_info_footer:
 .s1:    db "________", "_", "________", " "
 .s2:    db "________", "_", "________", " "
 .s3:    db "________", " "
-.s4:    db 0x0A, 0x0D, 0
+.s4:    db "________", " "
+.s5:    db 0x0A, 0x0D, 0
