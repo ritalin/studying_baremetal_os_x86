@@ -84,8 +84,9 @@ put_mem_info:
         mov bp, sp
 
 ;**** レジスタの保存 **** 
+        push bx
         push si
-   
+        
 ;**** 処理の開始 ****
         mov si, [bp + 4]
 
@@ -106,9 +107,17 @@ put_mem_info:
         cdecl itoa, word [si + mem_map_buf.type + 0], .s5 + 4, 4, 16, 0b0010
 
         cdecl puts, .s1
+
+        ; ** タイプ名 **
+        mov bx, [si + mem_map_buf.type]
+        and bx, 0x07                        ; 下位7 Bit (0 - 5)
+        shl bx, 1                           ; タイプ名要素サイズに
+        add bx, .t0                         ; タイプ名配列の位置に移動
+        cdecl puts, word [bx]
         
 ;**** レジスタの復帰 **** 
         pop si
+        pop bx
 
 ;**** スタックフレームの破棄 ****
         mov sp, bp
@@ -120,7 +129,15 @@ put_mem_info:
 .s3:    db "ZZZZZZZZ", "_"
 .s4:    db "ZZZZZZZZ", " "
 .s5:    db "ZZZZZZZZ", " "
-.s6:    db 0x0A, 0x0D, 0
+.s6:    db 0
+
+.t1:    db "(Unknown)", 0x0A, 0x0D, 0
+.t2:    db "(usable)", 0x0A, 0x0D, 0
+.t3:    db "(reserved)", 0x0A, 0x0D, 0
+.t4:    db "(ACPI Data)", 0x0A, 0x0D, 0
+.t5:    db "(ACPI NVS)", 0x0A, 0x0D, 0
+.t6:    db "(bad memory)", 0x0A, 0x0D, 0
+.t0:    dw .t1, .t2, .t3, .t4, .t5, .t6
 
 ;********************************************************************************
 ; void put_mem_info_footer()
