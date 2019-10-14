@@ -131,13 +131,45 @@ stage_3:
         mov ax, [FONT + font.off]
         cdecl itoa, ax, .p2, 4, 16, 0b0010 
         cdecl puts, .s1
-        jmp $
+        jmp stage_4
 
 .s0:    db "3rd stage...", 0x0A, 0x0D, 0
 .s1:    db "  Font address="
 .p1:    db "ZZZZ:"
 .p2:    db "ZZZZ"
 .p3:    db 0x0A, 0x0D, 0
+
+%include "modules/real/kbc.s"
+
+;********************************************************************************
+; Stage4
+;********************************************************************************
+stage_4:
+        cdecl puts, .s0
+
+        ; ** A20ゲートの有効化
+        cli                         ; 割り込み禁止
+        cdecl write_kbc_cmd, 0xAD   ; キーボード無効化
+
+        cdecl write_kbc_cmd, 0xD0   ; 読み出し依頼
+        cdecl read_kbc_data, .key    ; データ読み出し
+
+        mov bl, [.key]
+        or bl, 0x02                 ; A20ゲートの有効化
+
+        cdecl write_kbc_cmd, 0xD1   ; 書き込み依頼
+        cdecl write_kbc_data, bx    ; データ書き込み
+
+        cdecl write_kbc_cmd, 0xAE   ; キーボード有効化
+        cdecl wait_write_kbc
+        sti                         ; 割り込み許可
+
+        cdecl puts, .s1     
+        jmp $
+
+.s0:    db "4th stage...", 0x0A, 0x0D, 0
+.s1:    db "A20 Gate Enabled.", 0x0A, 0x0D, 0
+.key:   dw 0
 
 ;********************************************************************************
 ; パディング(8kB)
