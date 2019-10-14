@@ -16,8 +16,13 @@ all: ;
 run: src_13
 	$(VM) -monitor stdio $(PROGRAM)
 
+.PHONY: src_15
+src_15: 
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/15_load_kernel
+
 .PHONY: src_13
-src_13:
+src_13: 
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/13_a20
 	$(ASM) $(SRC_DIR)/13_a20/boot.s -I$(ASM_SEARCH_PATH) -o $(PROGRAM) -l $(PROGRAM_LIST) 
 
 .PHONY: src_12
@@ -63,6 +68,14 @@ src_01:
 .PHONY: src_00
 src_00:
 	$(ASM) $(SRC_DIR)/00_boot_only/boot.s -o $(PROGRAM) -l $(PROGRAM_LIST) 
+
+$(PROGRAM): $(foreach f,$(notdir $(patsubst %.s,%.bin, $(wildcard $(PROJECT)/*.s))),$(OUT_DIR)/$(f))
+	cat $^ > $(PROGRAM)
+
+$(OUT_DIR)/%.bin: $(PROJECT)/%.s
+	$(ASM) $< -I$(ASM_SEARCH_PATH) \
+	    -o $@ \
+	    -l $(patsubst %.bin,%.list,$@)
 
 .PHONY: clean
 clean:
