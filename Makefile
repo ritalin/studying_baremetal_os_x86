@@ -13,8 +13,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_15
+run: src_16
 	$(VM) -monitor stdio $(PROGRAM)
+
+.PHONY: src_16
+src_16: 
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/16_protect_mode
 
 .PHONY: src_15
 src_15: 
