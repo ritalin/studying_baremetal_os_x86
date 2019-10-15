@@ -179,7 +179,6 @@ stage_5:
         cdecl puts, .s0
 
         ; ** LBA -> CHS変換 **
-
         cdecl read_lba, BOOT, BOOT_SECT, KERNEL_SECT, BOOT_END
 
         cmp ax, KERNEL_SECT
@@ -189,12 +188,33 @@ stage_5:
         cdecl reboot
 .LOAD_SUCCESS:
         cdecl puts, .s1
-        jmp $
+        jmp stage_6
 
 .s0:    db "5th stage...", 0x0A, 0x0D, 0
 .s1:    db "Success load kernel !", 0x0A, 0x0D, 0
 .err0:  db "Failure load kernel...", 0x0A, 0x0D, 0
 
+;********************************************************************************
+; Stage6
+;********************************************************************************
+stage_6:
+        cdecl puts, .s0
+        cdecl puts, .s1
+        
+        ; 入力待ち
+.LOOP
+        mov ah, 0x00
+        int 0x16
+        cmp al, ' '
+        jnz .LOOP
+
+        cdecl puts, .s2
+        jmp $
+
+.s0:    db "6th stage...", 0x0A, 0x0D, 0x0A, 0x0D, 0
+.s1:    db "[Push SPACE Key to protect mode...]", 0x0A, 0x0D, 0
+.s2:    db "Configure video mode...", 0x0A, 0x0D, 0
+       
 ;********************************************************************************
 ; パディング(8kB)
 ;********************************************************************************
