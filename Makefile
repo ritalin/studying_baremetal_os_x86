@@ -17,11 +17,13 @@ run: src_16
 	$(VM) -monitor stdio $(PROGRAM)
 
 .PHONY: src_16
-src_15: 
+src_16: 
 	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/16_load_kernel
 
+# src_14以降のビルド後は複数の成果物ができてしまうため、先に *make clean* を行うこと
+
 .PHONY: src_14
-src_13: 
+src_14: 
 	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/14_a20
 
 .PHONY: src_12
@@ -32,11 +34,9 @@ src_12:
 src_11:
 	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/11_font_address
 
-
 .PHONY: src_10
 src_10:
 	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/10_drive_param
-
 
 .PHONY: src_08
 src_08:
