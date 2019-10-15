@@ -209,6 +209,10 @@ stage_6:
         jnz .LOOP
 
         cdecl puts, .s2
+
+        mov ax, 0x0012      ; VGA 640 x 480
+        int 0x10
+        
         jmp $
 
 .s0:    db "6th stage...", 0x0A, 0x0D, 0x0A, 0x0D, 0
