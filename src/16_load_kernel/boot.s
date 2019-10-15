@@ -180,38 +180,20 @@ stage_5:
 
         ; ** LBA -> CHS変換 **
 
-        cdecl itoa, BOOT_SECT, .v0, 5, 10, 0b0000
-        cdecl puts, .t0
+        cdecl read_lba, BOOT, BOOT_SECT, KERNEL_SECT, BOOT_END
 
-        cdecl lba_to_chs, BOOT, .chs_buf, BOOT_SECT
-
-        cdecl itoa, word [.chs_buf + drive.cyln], .v1, 5, 10, 0b0000
-        cdecl puts, .t1
-        cdecl itoa, word [.chs_buf + drive.head], .v2, 5, 10, 0b0000
-        cdecl puts, .t2
-        cdecl itoa, word [.chs_buf + drive.sect], .v3, 5, 10, 0b0000
-        cdecl puts, .t3
-
+        cmp ax, KERNEL_SECT
+        jz .LOAD_SUCCESS
+.LOAD_FAILED:
+        cdecl puts, .err0
+        cdecl reboot
+.LOAD_SUCCESS:
+        cdecl puts, .s1
         jmp $
 
 .s0:    db "5th stage...", 0x0A, 0x0D, 0
-
-.t0:    db "    Kernel LBA: "
-.v0:    db "     ", 0x0A, 0x0D, 0
-.t1:    db "    C:"
-.v1:    db "     ", 0x0A, 0x0D, 0
-.t2:    db "    H:"
-.v2:    db "     ", 0x0A, 0x0D, 0
-.t3:    db "    S:"
-.v3:    db "     ", 0x0A, 0x0D, 0
-
-.chs_buf:
-        istruc drive
-            at drive.no,     dw 0
-            at drive.cyln,   dw 0
-            at drive.head,   dw 0
-            at drive.sect,   dw 0
-        iend 
+.s1:    db "Success load kernel !", 0x0A, 0x0D, 0
+.err0:  db "Failure load kernel...", 0x0A, 0x0D, 0
 
 ;********************************************************************************
 ; パディング(8kB)

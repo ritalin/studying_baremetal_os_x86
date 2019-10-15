@@ -1,4 +1,50 @@
 ;********************************************************************************
+; int read_lba(drive, lba, sect, out dest)
+;********************************************************************************
+read_lba:
+;**** スタックフレームの構築 **** 
+                            ;   +10| 展開先のアドレス
+                            ;    +8| 読み込むセクションサイズ
+                            ;    +6| LBA
+                            ;    +4| ドライブ情報へのポインタ
+                            ;    +2| IP (caller)
+        push bp             ; BP  0| BP (old)
+        mov bp, sp
+
+;**** レジスタの保存 **** 
+        push si
+
+;**** 処理の開始 ****
+        mov si, [bp + 4]    ; ドライブ情報
+        mov ax, [bp + 6]    ; LBA
+
+        ; ** LBA -> CHS変換 **
+        cdecl lba_to_chs, si, .chs_buf, ax
+
+        ; ** ドライブ番号 **
+        mov al, [si + drive.no]
+        mov [.chs_buf + drive.no], al
+
+        ; *: セクタを読み込む **
+        cdecl read_chs, .chs_buf, word [bp + 8], word [bp + 10] ; AXに読んだセクタ数
+
+;**** レジスタの復帰 **** 
+        pop si
+
+;**** スタックフレームの破棄 ****
+        mov sp, bp
+        pop bp
+        ret
+
+.chs_buf:
+        istruc drive
+            at drive.no,     dw 0
+            at drive.cyln,   dw 0
+            at drive.head,   dw 0
+            at drive.sect,   dw 0
+        iend 
+
+;********************************************************************************
 ; int lba_to_chs(drive, out chs, lba)
 ;********************************************************************************
 lba_to_chs:
