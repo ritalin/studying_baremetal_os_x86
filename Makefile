@@ -13,11 +13,11 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_16
+run: src_15
 	$(VM) -monitor stdio $(PROGRAM)
 
-.PHONY: src_16
-src_16: 
+.PHONY: src_15
+src_15: 
 	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/16_load_kernel
 
 # src_14以降のビルド後は複数の成果物ができてしまうため、先に *make clean* を行うこと
