@@ -18,7 +18,7 @@ run: src_15
 
 .PHONY: src_15
 src_15: 
-	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/16_load_kernel
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/15_load_kernel
 
 # src_14以降のビルド後は複数の成果物ができてしまうため、先に *make clean* を行うこと
 
