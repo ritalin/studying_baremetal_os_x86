@@ -47,7 +47,7 @@ kernel:
         ; ** 8ドットの矩形を描画
         mov edi, 1
         shl edi, 8
-        lea edi, [edi * 4 + edi + 0xA_0000]
+        lea edi, [edi * 4 + edi + 0xA_0000]     ; 10Bitシフト + 8Bitシフト = フォント1行分のオフセット
         mov [edi + 80 * 0], word 0xFF
         mov [edi + 80 * 1], word 0xFF
         mov [edi + 80 * 2], word 0xFF
