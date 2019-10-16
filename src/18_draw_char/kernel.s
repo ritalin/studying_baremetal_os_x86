@@ -17,28 +17,21 @@ kernel:
         mov [FONT], eax
 
         ; ** 8Bitの横線を描画
-        mov ah, 0x07                        ; 書き込みプレーンを指示 (_____RGB)
-        mov al, 0x02                        ; 書き込みプレーンのマスク
-        mov dx, 0x03C4                      ; シーケンサ制御ポート
+        cdecl select_vga_write_plane, 0x07      ; 書き込みプレーンを指示 (_____RGB)
+        mov [0x000A_0000 + 400], byte 0xFF
 
-        out dx, ax                          ; ポート出力
-        mov [0x000A_0000 + 0], byte 0xFF
-
-        mov ah, 0x04                        ; 書き込みプレーンを指示 (_____R__)
-        out dx, ax                          ; ポート出力
+        cdecl select_vga_write_plane, 0x04      ; 書き込みプレーンを指示 (_____R__)
         mov [0x000A_0000 + 480 + 1], byte 0xFF
 
-        mov ah, 0x02                        ; 書き込みプレーンを指示 (______G_)
-        out dx, ax                          ; ポート出力
         mov [0x000A_0000 + 480 + 2], byte 0xFF
 
-        mov ah, 0x01                        ; 書き込みプレーンを指示 (_______B)
-        out dx, ax                          ; ポート出力
+        cdecl select_vga_write_plane, 0x01      ; 書き込みプレーンを指示 (_______B)
         mov [0x000A_0000 + 480 + 3], byte 0xFF
         
+        cdecl select_vga_write_plane, 0x02      ; 書き込みプレーンを指示 (______G_)
+        
         ; ** 画面を横切る横線を描画
-        mov     ah, 0x02                        ; AH = 書き込みプレーンを指定(Bit:----__G_)        
-        out     dx, ax                          ; // ポート出力        
+
         lea     edi, [0x000A_0000 + 960]        ; EDI = VRAMアドレス;        
         mov     ecx, 80                         ; ECX = 繰り返し回数;        
         mov     al, 0xFF                        ; AL  = ビットパターン;        
@@ -75,6 +68,8 @@ kernel:
 
 ALIGN 4, db 0
 FONT:   dd 0                                ; フォントアドレス保持先   
+
+%include "modules/protect/vga.s"
 
 ;********************************************************************************
 ; パディング(8kB)
