@@ -22,7 +22,7 @@ kernel:
         mov dx, 0x03C4                      ; シーケンサ制御ポート
 
         out dx, ax                          ; ポート出力
-        mov [0x000A_0000 + 0], byte 0xFF
+        mov [0x000A_0000 + 400 + 0], byte 0xFF
 
         mov ah, 0x04                        ; 書き込みプレーンを指示 (_____R__)
         out dx, ax                          ; ポート出力
