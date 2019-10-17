@@ -29,7 +29,7 @@ kernel:
         mov [0x000A_0000 + 480 + 3], byte 0xFF
         
         cdecl select_vga_write_plane, 0x02      ; 書き込みプレーンを指示 (______G_)
-        
+
         ; ** 画面を横切る横線を描画
 
         lea     edi, [0x000A_0000 + 960]        ; EDI = VRAMアドレス;        
@@ -58,11 +58,8 @@ kernel:
         mov edi, 2
         shl edi, 8
         lea edi, [edi * 4 + edi + 0xA_0000]
-        mov ecx, 16         ; 1文字の高さ
-.CHAR_LOOP:
-        movsb
-        add edi, 80-1
-        loop .CHAR_LOOP
+
+        cdecl copy_vram_font, esi, edi, 0x02, 0x02
 
         jmp $
 
@@ -70,6 +67,7 @@ ALIGN 4, db 0
 FONT:   dd 0                                ; フォントアドレス保持先   
 
 %include "modules/protect/vga.s"
+%include "modules/protect/draw_char.s"
 
 ;********************************************************************************
 ; パディング(8kB)
