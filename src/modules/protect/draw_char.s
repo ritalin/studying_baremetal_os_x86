@@ -97,9 +97,17 @@ copy_vram_font:
         not ah
 
         ; ** 前景色と背景色を合成する
-        and al, dl                      ; 前景色        
+        and al, dl                      ; 前景色    
+
+        test ebx, 0x0010                ; 透過色の判定
+        jz .COLOR_COPY
+.COLOR_TRANSP:
+        and ah, [edi]                   ; 透過合成
+        jmp .COLOR_END
+.COLOR_COPY:  
         and ah, dh                      ; 背景色
-        or al, ah                        ; 色の合成 
+.COLOR_END:  
+        or al, ah                       ; 色の合成 
 
         mov [edi], al
         add edi, 80

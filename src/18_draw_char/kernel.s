@@ -53,7 +53,10 @@ kernel:
         ; ** 文字を印字
         cdecl draw_char, 1, 2, 0x010F, 'A'
         cdecl draw_char, 2, 2, 0x010F, 'B'
-        cdecl draw_char, 3, 2, 0x010F, 'C'
+        cdecl draw_char, 3, 2, 0x010F, 'C'      ; ___B _I___
+        cdecl draw_char, 1, 2, 0x0402, '0'      ; _R__ ___G_
+        cdecl draw_char, 2, 2, 0x0212, '1'      ; __G_ A__G_
+        cdecl draw_char, 3, 2, 0x0212, '_'      ; __G_ A__G_
 
         jmp $
 
