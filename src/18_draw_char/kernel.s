@@ -51,15 +51,7 @@ kernel:
         mov [edi + 80 * 7], word 0xFF
 
         ; ** 文字を印字
-        mov esi, 'A'
-        shl esi, 4          ; 1文字が16Byteのため、メモリ上の文字のオフセットを計算
-        add esi, [FONT]
-
-        mov edi, 2
-        shl edi, 8
-        lea edi, [edi * 4 + edi + 0xA_0000]
-
-        cdecl copy_vram_font, esi, edi, 0x02, 0x02
+        cdecl draw_char, 1, 2, 0x010F, 'T'
 
         jmp $
 
