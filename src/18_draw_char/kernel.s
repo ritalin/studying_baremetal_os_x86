@@ -51,7 +51,9 @@ kernel:
         mov [edi + 80 * 7], word 0xFF
 
         ; ** 文字を印字
-        cdecl draw_char, 1, 2, 0x010F, 'T'
+        cdecl draw_char, 1, 2, 0x010F, 'A'
+        cdecl draw_char, 2, 2, 0x010F, 'B'
+        cdecl draw_char, 3, 2, 0x010F, 'C'
 
         jmp $
 
