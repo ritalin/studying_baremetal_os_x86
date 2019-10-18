@@ -38,7 +38,6 @@ draw_font:
         inc ecx
         jmp .LOOP
 .END:
-        jmp $
 
 ;**** レジスタの復帰 **** 
         pop edi
