@@ -77,6 +77,7 @@ copy_vram_font:
         push eax
         push ebx
         push ecx
+        push edx
         push esi
         push edi
 
@@ -123,6 +124,7 @@ copy_vram_font:
 ;**** レジスタの復帰 **** 
         pop edi
         pop esi
+        pop edx
         pop ecx
         pop ebx
         pop eax
