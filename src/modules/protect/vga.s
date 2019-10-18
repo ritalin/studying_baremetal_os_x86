@@ -131,3 +131,34 @@ copy_vram_font:
         mov esp, ebp
         pop ebp
         ret
+
+;********************************************************************************
+; void copy_vram_dot(mask, vram, plane, color)
+;********************************************************************************
+copy_vram_dot:
+;**** スタックフレームの構築 **** 
+                            ;    +20| 前景色
+                            ;    +16| 書き込み先プレーン
+                            ;    +12| VRAMアドレス
+                            ;     +8| ビットマスク
+                            ;     +4| EIP (caller)
+        push ebp            ; EBP  0| EBP (old)
+        mov ebp, esp
+
+;**** レジスタの保存 ****  
+        push edi
+
+;**** 処理の開始 ****
+        mov edi, [ebp + 12]     ; VRAMアドレス
+
+        mov al, [ebp + 8]
+
+        mov [edi], al
+
+;**** レジスタの復帰 **** 
+        pop edi
+
+;**** スタックフレームの破棄 ****
+        mov esp, ebp
+        pop ebp
+        ret
