@@ -19,7 +19,12 @@ kernel:
         ; ** フォントをを印字
         cdecl draw_font, 63, 13
 
+        ; ** 文字列を印字する
+        cdecl draw_str, 25, 14, 0x010F, .s0
+
         jmp $
+
+.s0:    db " Hello, Kernel ! ", 0
 
 ALIGN 4, db 0
 FONT:   dd 0                                ; フォントアドレス保持先   
@@ -27,6 +32,7 @@ FONT:   dd 0                                ; フォントアドレス保持先
 %include "modules/protect/vga.s"
 %include "modules/protect/draw_char.s"
 %include "modules/protect/draw_font.s"
+%include "modules/protect/draw_str.s"
 
 ;********************************************************************************
 ; パディング(8kB)
