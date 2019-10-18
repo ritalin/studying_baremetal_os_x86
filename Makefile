@@ -16,6 +16,10 @@ all: ;
 run: src_22
 	$(VM) -monitor stdio $(PROGRAM)
 
+.PHONY: src_23
+src_23: 
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/23_draw_line
+
 .PHONY: src_22
 src_22: 
 	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/22_draw_pixel
