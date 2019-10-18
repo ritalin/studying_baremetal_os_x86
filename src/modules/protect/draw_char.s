@@ -12,6 +12,9 @@ draw_char:
         mov ebp, esp
 
 ;**** レジスタの保存 **** 
+        push ebx
+        push esi
+        push edi
 
 ;**** 処理の開始 ****
         ; ** コピー元フォントアドレス
@@ -48,6 +51,9 @@ draw_char:
         cdecl copy_vram_font, esi, edi, 0x01, ebx
 
 ;**** レジスタの復帰 **** 
+        pop edi
+        pop esi
+        pop ebx
 
 ;**** スタックフレームの破棄 ****
         mov esp, ebp
@@ -112,7 +118,7 @@ copy_vram_font:
         mov [edi], al
         add edi, 80
         loop .LOOP
-.END
+.END:
 
 ;**** レジスタの復帰 **** 
         pop edi
