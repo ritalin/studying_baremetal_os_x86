@@ -46,8 +46,8 @@ draw_char:
         cdecl copy_vram_font, esi, edi, 0x02, ebx
 
         ; 青の出力
-        cdecl select_vga_read_plane, 0x00           ; [____ __G_]
-        cdecl select_vga_write_plane, 0x01          ; [____ __G_]
+        cdecl select_vga_read_plane, 0x00           ; [____ ___B]
+        cdecl select_vga_write_plane, 0x01          ; [____ ___B]
         cdecl copy_vram_font, esi, edi, 0x01, ebx
 
 ;**** レジスタの復帰 **** 
