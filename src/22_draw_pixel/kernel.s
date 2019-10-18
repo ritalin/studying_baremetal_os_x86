@@ -26,23 +26,9 @@ kernel:
         cdecl draw_color_bar, 63, 4
 
         ; ** ドットを描画する
-        cdecl select_vga_read_plane, 0x01
-        cdecl select_vga_write_plane, 0x02
 
-        mov edi, 4                              ; Y座標からVRAMの先頭アドレスを計算する
-        shl edi, 4      
-        lea edi, [edi * 4 + edi + 0xA_0000]     ; 80Byte * Y座標を移動する
+        cdecl draw_pixel, 8, 4, 0x02
 
-        mov ebx, 8
-        mov ecx, ebx                            ; 後でビット位置を割り出すためX座標を退避
-        shr ebx, 3                              ; VGAは8bit単位で管理されるため、8で割る
-        add edi, ebx                            ; 座標位置に相当するVRAMアドレス
-
-        and ecx, 0x07                           ; 8で割ったあまりを求める
-        mov ebx, 0b_1000_0000
-        shr ebx, cl                             ; ビットマスクを作成する
-
-        cdecl copy_vram_dot, ebx, edi, 0x02, 0x02
 
         jmp $
 
@@ -56,6 +42,7 @@ FONT:   dd 0                                ; フォントアドレス保持先
 %include "modules/protect/draw_font.s"
 %include "modules/protect/draw_str.s"
 %include "modules/protect/draw_color_bar.s"
+%include "modules/protect/draw_pixel.s"
 
 ;********************************************************************************
 ; パディング(8kB)
