@@ -146,17 +146,32 @@ copy_vram_dot:
         mov ebp, esp
 
 ;**** レジスタの保存 ****  
+        push ebx
         push edi
 
 ;**** 処理の開始 ****
         mov edi, [ebp + 12]     ; VRAMアドレス
+        movzx eax, byte [ebp + 16]   ; プレーン
+        movzx ebx, word [ebp + 20]   ; 前景色
 
+        ; ** 背景色のマスクを作成
+        test al, bl             ; ZF = AL & BL
+        setz bl                 ; BL = ZF ? 0x01 : 0x00
+        dec bl                  ; BL = ZF ? 0x00 : 0xFF
+
+        ; ** 反転データを作成
         mov al, [ebp + 8]
+        mov ah, al
+        not ah                  ; 反転したビットマスク
 
+        and ah, [edi]           ; 現在値をマスクする
+        and al, bl              ; 背景色をマスクする
+        or al, ah               ; 合成
         mov [edi], al
 
 ;**** レジスタの復帰 **** 
         pop edi
+        pop ebx
 
 ;**** スタックフレームの破棄 ****
         mov esp, ebp
