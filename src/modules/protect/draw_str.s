@@ -12,6 +12,7 @@ draw_str:
         mov ebp, esp
 
 ;**** レジスタの保存 **** 
+        push eax
         push ebx
         push ecx
         push edx
@@ -49,6 +50,7 @@ draw_str:
         pop edx
         pop ecx
         pop ebx
+        pop eax
 
 ;**** スタックフレームの破棄 ****
         mov esp, ebp

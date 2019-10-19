@@ -19,6 +19,7 @@ draw_line:
         push dword 0                ;    -24| Y軸の描画方向(+1: 正, -1: 負)      
 
 ;**** レジスタの保存 **** 
+        push eax
         push ebx
         push ecx
         push edx
@@ -74,8 +75,8 @@ draw_line:
 .AXIS_BEGIN:
         cmp ebx, edx                ;
         jg .AXIS_X                  ; X方向長さ > Y方向長さ
-        mov esi, ecx                ; 基準軸: Y軸
-        mov edi, eax                ; 相対軸: X軸
+        mov esi, [ebp - 16]         ; 基準軸: Y軸
+        mov edi, [ebp - 4]          ; 相対軸: X軸
 
         mov [.s1b], byte 'Y'
         mov [.s1d], byte 'X'
@@ -83,13 +84,17 @@ draw_line:
 
         jmp .AXIS_END
 .AXIS_X:
-        mov esi, eax                ; 基準軸: X軸
-        mov edi, ecx                ; 相対軸: Y軸
+        mov esi, [ebp - 4]          ; 基準軸: X軸
+        mov edi, [ebp - 16]         ; 相対軸: Y軸
         
         mov [.s1b], byte 'X'
         mov [.s1d], byte 'Y'
         cdecl draw_str, 25, 20, 0x0F, .s1
 .AXIS_END:
+
+        cdecl itoa, esi, .s2b, 3, 10, 0b0000
+        cdecl itoa, edi, .s2d, 3, 10, 0b0000
+        cdecl draw_str, 25, 21, 0x0F, .s2
 
 ;**** レジスタの復帰 **** 
         pop edi
@@ -97,6 +102,7 @@ draw_line:
         pop edx
         pop ecx
         pop ebx
+        pop eax
 
 ;**** スタックフレームの破棄 ****
         ; ** ローカル変数の破棄
@@ -117,3 +123,9 @@ draw_line:
 .s1b:   db " ", " "
 .s1c:   db "Rel="
 .s1d:   db " ", 0 
+
+.s2:
+.s2a:   db "ESI="
+.s2b:   db "   ", " "
+.s2c:   db "EDI="
+.s2d:   db "   ", 0

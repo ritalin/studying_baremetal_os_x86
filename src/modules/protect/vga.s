@@ -146,6 +146,7 @@ copy_vram_dot:
         mov ebp, esp
 
 ;**** レジスタの保存 ****  
+        push eax
         push ebx
         push edi
 
@@ -172,6 +173,7 @@ copy_vram_dot:
 ;**** レジスタの復帰 **** 
         pop edi
         pop ebx
+        pop eax
 
 ;**** スタックフレームの破棄 ****
         mov esp, ebp
