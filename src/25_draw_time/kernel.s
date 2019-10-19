@@ -29,6 +29,9 @@ kernel:
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
 
+        ; ** 時刻の表示
+        cdecl draw_time, 72, 0, 0x0700, RTC_TIME
+
         ; ** ドットを描画する
         cdecl draw_pixel,  8,  4, 0x01
         cdecl draw_pixel,  9,  5, 0x01
@@ -79,7 +82,9 @@ kernel:
 .s0:    db " Hello, Kernel ! ", 0
 
 ALIGN 4, db 0
-FONT:   dd 0                                ; フォントアドレス保持先   
+FONT:   dd 0                                    ; フォントアドレス保持先   
+RTC_TIME:
+        dd 0                                    ; 時刻の保存先
 
 %include "modules/protect/vga.s"
 %include "modules/protect/draw_char.s"
@@ -90,6 +95,7 @@ FONT:   dd 0                                ; フォントアドレス保持先
 %include "modules/protect/draw_line.s"
 %include "modules/protect/draw_rect.s"
 %include "modules/protect/itoa.s"
+%include "modules/protect/draw_time.s"
 
 ;********************************************************************************
 ; パディング(8kB)
