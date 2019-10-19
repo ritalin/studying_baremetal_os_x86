@@ -48,7 +48,7 @@ RTC_TIME:
 %include "modules/protect/draw_str.s"
 %include "modules/protect/draw_color_bar.s"
 %include "modules/protect/itoa.s"
-%include "26_int_default/modules/int_default.s"
+%include "modules/interrupt.s"
 
 ;********************************************************************************
 ; パディング(8kB)
