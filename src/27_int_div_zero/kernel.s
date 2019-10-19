@@ -29,9 +29,8 @@ kernel:
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
 
-        push 0x1223344                  ; ダミーな値をスタックに積む
-        pushf                           ; EFLAGSをスタックに積む
-        call 0x0008:int_default         ; デフォルト割り込み処理の呼出し
+        ; ** IDTRを初期化する
+        cdecl init_int
 
         jmp $
 
