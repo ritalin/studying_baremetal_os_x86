@@ -9,10 +9,17 @@ get_rtc_time:
         mov ebp, esp
 
 ;**** レジスタの保存 **** 
-        push eax
         push ebx
 
 ;**** 処理の開始 ****
+        mov al, 0x0A
+        out 0x70, al        ; RTCのレジスタAへのアクセスを指示
+        in al, 0x71
+        test al, 0x80       ; RTCが更新中かどうか
+        je .RTC_TIME_BEGIN
+        mov eax, 1
+        jmp .END
+.RTC_TIME_BEGIN:
         mov al, 0x04
         out 0x70, al        ; RTC RAMの読み取り先を指示 (Hour)
         in al, 0x71         ; 時刻パートを読み込む
@@ -34,8 +41,11 @@ get_rtc_time:
         mov ebx, [ebp + 8]
         mov [ebx], eax
 
+        mov eax, 0
+.END
+
 ;**** レジスタの復帰 **** 
-        pop edi
+        pop edx
 
 ;**** スタックフレームの破棄 ****
         mov esp, ebp
