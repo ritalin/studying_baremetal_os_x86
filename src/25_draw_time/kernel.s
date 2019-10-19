@@ -30,10 +30,7 @@ kernel:
         cdecl draw_color_bar, 63, 4
 
         ; ** 時刻の表示
-        mov esi, RTC_TIME
-        mov [esi + 0], byte 40
-        mov [esi + 1], byte 18
-        mov [esi + 2], byte 11
+        cdecl get_rtc_time, RTC_TIME
         cdecl draw_time, 72, 0, 0x0700, dword [RTC_TIME]
 
         ; ** ドットを描画する
@@ -99,6 +96,7 @@ RTC_TIME:
 %include "modules/protect/draw_line.s"
 %include "modules/protect/draw_rect.s"
 %include "modules/protect/itoa.s"
+%include "modules/protect/rtc.s"
 %include "modules/protect/draw_time.s"
 
 ;********************************************************************************
