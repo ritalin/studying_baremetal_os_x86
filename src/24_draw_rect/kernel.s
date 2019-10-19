@@ -69,6 +69,11 @@ kernel:
         cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+200, 0x0F
         cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+0, LINR_ORIGIN_Y+100, 0x0F
         
+        ; 矩形を描画する
+        cdecl draw_rect, 100, 200, 100, 100, 0x03
+        cdecl draw_rect, 150, 150, 250, 100, 0x05
+        cdecl draw_rect, 300, 100, 50, 300, 0x06
+
         jmp $
 
 .s0:    db " Hello, Kernel ! ", 0
@@ -83,6 +88,7 @@ FONT:   dd 0                                ; フォントアドレス保持先
 %include "modules/protect/draw_color_bar.s"
 %include "modules/protect/draw_pixel.s"
 %include "modules/protect/draw_line.s"
+%include "modules/protect/draw_rect.s"
 %include "modules/protect/itoa.s"
 
 ;********************************************************************************
