@@ -13,8 +13,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_26
+run: src_27
 	$(VM) -monitor stdio $(PROGRAM)
+
+.PHONY: src_27
+src_27: 
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/27_int_div_zero
 
 .PHONY: src_26
 src_26: 
@@ -124,7 +128,7 @@ $(PROGRAM): $(foreach f,$(notdir $(patsubst %.s,%.bin, $(wildcard $(PROJECT)/*.s
 $(OUT_DIR)/%.bin: $(PROJECT)/%.s
 	$(ASM) $< -I$(ASM_SEARCH_PATH) \
 	    -o $@ \
-	    -l $(patsubst %.bin,%.list,$@)
+	    -l $(patsubst %.bin,%.list,$@) -I $(PROJECT)
 
 .PHONY: clean
 clean:
