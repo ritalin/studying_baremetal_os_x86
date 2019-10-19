@@ -45,7 +45,8 @@ kernel:
         cdecl draw_pixel,  8, 11, 0x02
 
         ; ** 直線を描画する
-        cdecl draw_line, 108, 116, 8, 16, 0x0F
+        cdecl draw_line, 108, 116, 8, 116, 0x0F
+        cdecl draw_line, 108, 116, 108, 16, 0x0F
 
         jmp $
 

@@ -11,12 +11,13 @@ draw_line:
                                     ;     +4| EIP (caller)
         push ebp                    ; EBP  0| EBP (old)
         mov ebp, esp                ; ------+--------------
-        push dword 0                ;     -4| 現在のX座標
-        push dword 0                ;     -8| X軸方向の長さ
-        push dword 0                ;    -12| X軸の描画方向(+1: 正, -1: 負)      
-        push dword 0                ;    -16| 現在のY座標
-        push dword 0                ;    -20| Y軸方向の長さ
-        push dword 0                ;    -24| Y軸の描画方向(+1: 正, -1: 負)      
+        push dword 0                ;     -4| 基準軸の積算値
+        push dword 0                ;     -8| 現在のX座標
+        push dword 0                ;    -12| X軸方向の長さ
+        push dword 0                ;    -16| X軸の描画方向(+1: 正, -1: 負)      
+        push dword 0                ;    -20| 現在のY座標
+        push dword 0                ;    -24| Y軸方向の長さ
+        push dword 0                ;    -28| Y軸の描画方向(+1: 正, -1: 負)      
 
 ;**** レジスタの保存 **** 
         push eax
@@ -64,19 +65,19 @@ draw_line:
         cdecl draw_str, 25, 19, 0x0F, .s0
         
         ; ** 初期位置をローカル変数に保存
-        mov [ebp - 4], eax
-        mov [ebp - 8], ebx
-        mov [ebp - 12], esi
-        mov [ebp - 16], ecx
-        mov [ebp - 20], edx
-        mov [ebp - 24], edi 
+        mov [ebp -  8], eax         ; X
+        mov [ebp - 12], ebx
+        mov [ebp - 16], esi
+        mov [ebp - 20], ecx         ; Y
+        mov [ebp - 24], edx
+        mov [ebp - 28], edi 
 
         ; ** 基準軸・相対軸を決定する
 .AXIS_BEGIN:
         cmp ebx, edx                ;
         jg .AXIS_X                  ; X方向長さ > Y方向長さ
-        lea esi, [ebp - 16]         ; 基準軸: Y軸
-        lea edi, [ebp - 4]          ; 相対軸: X軸
+        lea esi, [ebp - 20]         ; 基準軸: Y軸
+        lea edi, [ebp - 8]          ; 相対軸: X軸
 
         mov [.s1b], byte 'Y'
         mov [.s1d], byte 'X'
@@ -84,8 +85,8 @@ draw_line:
 
         jmp .AXIS_END
 .AXIS_X:
-        lea esi, [ebp - 4]          ; 基準軸: X軸
-        lea edi, [ebp - 16]         ; 相対軸: Y軸
+        lea esi, [ebp - 8]          ; 基準軸: X軸
+        lea edi, [ebp - 20]         ; 相対軸: Y軸
         
         mov [.s1b], byte 'X'
         mov [.s1d], byte 'Y'
@@ -95,6 +96,24 @@ draw_line:
         cdecl itoa, dword [esi], .s2b, 3, 10, 0b0000
         cdecl itoa, dword [edi], .s2d, 3, 10, 0b0000
         cdecl draw_str, 25, 21, 0x0F, .s2
+
+        ; 基準軸の繰り返し回数
+        mov ecx, [esi - 4]          ; 基準軸のローカル変数の一つ下に長さのローカル変数
+        cmp ecx, 0
+        jnz .LINE_BEGIN
+        mov ecx, 1                  ; 少なくとも1ドットは打つ
+.LINE_BEGIN:
+        cmp ecx, 0
+        je .LINE_END
+
+        cdecl draw_pixel, dword [ebp - 8], dword [ebp - 20], dword [ebp + 24]
+
+        mov eax, [esi - 8]          ; 基準軸の更新サイズ
+        add [esi - 0], eax          ; 基準軸の位置を更新
+
+        dec ecx
+        jmp .LINE_BEGIN
+.LINE_END:
 
 ;**** レジスタの復帰 **** 
         pop edi
