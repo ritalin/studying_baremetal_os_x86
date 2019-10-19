@@ -11,6 +11,12 @@ draw_line:
                                     ;     +4| EIP (caller)
         push ebp                    ; EBP  0| EBP (old)
         mov ebp, esp                ; ------+--------------
+        push dword 0                ;     -4| 現在のX座標
+        push dword 0                ;     -8| X軸方向の長さ
+        push dword 0                ;    -12| X軸の描画方向(+1: 正, -1: 負)      
+        push dword 0                ;    -16| 現在のY座標
+        push dword 0                ;    -20| Y軸方向の長さ
+        push dword 0                ;    -24| Y軸の描画方向(+1: 正, -1: 負)      
 
 ;**** レジスタの保存 **** 
         push ebx
@@ -45,7 +51,7 @@ draw_line:
 .GE_Y1:
         mov edi, 1                  ; y0 <= y1の場合
 .DIR_Y_END:
-        
+
         cdecl itoa, esi, .s0a, 2, 10, 0b0011
         cdecl itoa, ebx, .s0c, 3, 10, 0b0010
         cdecl draw_char, 25, 16, 0x0F, 'X'
@@ -55,6 +61,14 @@ draw_line:
         cdecl itoa, edx, .s0c, 3, 10, 0b0010
         cdecl draw_char, 25, 18, 0x0F, 'Y'
         cdecl draw_str, 25, 19, 0x0F, .s0
+        
+        ; ** 初期位置をローカル変数に保存
+        mov [ebp - 4], eax
+        mov [ebp - 8], ebx
+        mov [ebp - 12], esi
+        mov [ebp - 16], ecx
+        mov [ebp - 20], edx
+        mov [ebp - 24], edi 
 
 ;**** レジスタの復帰 **** 
         pop edi
@@ -64,6 +78,9 @@ draw_line:
         pop ebx
 
 ;**** スタックフレームの破棄 ****
+        ; ** ローカル変数の破棄
+        add esp, 24
+
         mov esp, ebp
         pop ebp
         ret
