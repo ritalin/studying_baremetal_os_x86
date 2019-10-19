@@ -44,6 +44,8 @@ kernel:
         cdecl draw_pixel,  9, 10, 0x02
         cdecl draw_pixel,  8, 11, 0x02
 
+        ; ** 直線を描画する
+        cdecl draw_line, 108, 116, 8, 16, 0x0F
 
         jmp $
 
@@ -58,6 +60,8 @@ FONT:   dd 0                                ; フォントアドレス保持先
 %include "modules/protect/draw_str.s"
 %include "modules/protect/draw_color_bar.s"
 %include "modules/protect/draw_pixel.s"
+%include "modules/protect/draw_line.s"
+%include "modules/protect/itoa.s"
 
 ;********************************************************************************
 ; パディング(8kB)

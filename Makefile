@@ -13,7 +13,7 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_23D
+run: src_23
 	$(VM) -monitor stdio $(PROGRAM)
 
 .PHONY: src_23
