@@ -29,9 +29,13 @@ kernel:
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
 
+        push 0x1223344                  ; ダミーな値をスタックに積む
+        pushf                           ; EFLAGSをスタックに積む
+        call 0x0008:int_default         ; デフォルト割り込み処理の呼出し
+
         jmp $
 
-.s0:    db " Hello, Kernel ! ", 0
+.s0:    db " Hello, Kernel! ", 0
 
 ALIGN 4, db 0
 FONT:   dd 0                                    ; フォントアドレス保持先   
@@ -44,6 +48,7 @@ RTC_TIME:
 %include "modules/protect/draw_str.s"
 %include "modules/protect/draw_color_bar.s"
 %include "modules/protect/itoa.s"
+%include "26_int_default/modules/int_default.s"
 
 ;********************************************************************************
 ; パディング(8kB)
