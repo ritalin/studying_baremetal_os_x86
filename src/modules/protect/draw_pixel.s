@@ -29,24 +29,26 @@ draw_pixel:
         mov ebx, 0b_1000_0000
         shr ebx, cl                                 ; ビットマスクを作成する
 
+        mov ecx, [ebp + 16]
+
         ; 輝度の出力
         cdecl select_vga_read_plane, 0x03           ; [____ I___]
         cdecl select_vga_write_plane, 0x08          ; [____ I___]
-        cdecl copy_vram_dot, ebx, edi, 0x08, ebx
+        cdecl copy_vram_dot, ebx, edi, 0x08, ecx
 
         ; 赤の出力
         cdecl select_vga_read_plane, 0x02           ; [____ _R__]
         cdecl select_vga_write_plane, 0x04          ; [____ _R__]
-        cdecl copy_vram_dot, ebx, edi, 0x04, ebx
+        cdecl copy_vram_dot, ebx, edi, 0x04, ecx
 
         cdecl select_vga_read_plane, 0x01           ; [____ __G_]
         cdecl select_vga_write_plane, 0x02          ; [____ __G_]
-        cdecl copy_vram_dot, ebx, edi, 0x02, 0x02
+        cdecl copy_vram_dot, ebx, edi, 0x02, ecx
 
         ; 青の出力
         cdecl select_vga_read_plane, 0x00           ; [____ ___B]
         cdecl select_vga_write_plane, 0x01          ; [____ ___B]
-        cdecl copy_vram_dot, ebx, edi, 0x01, ebx
+        cdecl copy_vram_dot, ebx, edi, 0x01, ecx
 
 ;**** レジスタの復帰 **** 
         pop edi
