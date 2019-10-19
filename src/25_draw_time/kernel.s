@@ -30,7 +30,11 @@ kernel:
         cdecl draw_color_bar, 63, 4
 
         ; ** 時刻の表示
-        cdecl draw_time, 72, 0, 0x0700, RTC_TIME
+        mov esi, RTC_TIME
+        mov [esi + 0], byte 40
+        mov [esi + 1], byte 18
+        mov [esi + 2], byte 11
+        cdecl draw_time, 72, 0, 0x0700, dword [RTC_TIME]
 
         ; ** ドットを描画する
         cdecl draw_pixel,  8,  4, 0x01
