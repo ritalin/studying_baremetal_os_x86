@@ -3,6 +3,10 @@
 
         ORG KERNEL_LOAD
 
+LINE_ORIGIN_X equ 8
+LINR_ORIGIN_Y equ 16
+
+
 [BITS 32]
 ;********************************************************************************
 ; エントリポイント
@@ -45,9 +49,26 @@ kernel:
         cdecl draw_pixel,  8, 11, 0x02
 
         ; ** 直線を描画する
-        cdecl draw_line, 108, 116, 8, 116, 0x0F
-        cdecl draw_line, 108, 116, 108, 16, 0x0F
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+0, LINR_ORIGIN_Y+0, 0x0F
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+200, LINR_ORIGIN_Y+0, 0x0F
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+200, LINR_ORIGIN_Y+200, 0x0F
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+0, LINR_ORIGIN_Y+200, 0x0F
 
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+50, LINR_ORIGIN_Y+0, 0x02
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+150, LINR_ORIGIN_Y+0, 0x03
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+150, LINR_ORIGIN_Y+200, 0x04
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+50, LINR_ORIGIN_Y+200, 0x05
+
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+0, LINR_ORIGIN_Y+50, 0x02
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+200, LINR_ORIGIN_Y+50, 0x03
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+200, LINR_ORIGIN_Y+150, 0x04
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+0, LINR_ORIGIN_Y+150, 0x05
+
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+0, 0x0F
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+200, LINR_ORIGIN_Y+100, 0x0F
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+200, 0x0F
+        cdecl draw_line, LINE_ORIGIN_X+100, LINR_ORIGIN_Y+100, LINE_ORIGIN_X+0, LINR_ORIGIN_Y+100, 0x0F
+        
         jmp $
 
 .s0:    db " Hello, Kernel ! ", 0

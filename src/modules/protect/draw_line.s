@@ -111,6 +111,20 @@ draw_line:
         mov eax, [esi - 8]          ; 基準軸の更新サイズ
         add [esi - 0], eax          ; 基準軸の位置を更新
 
+.SUM_REL_BEGIN:
+        mov eax, [ebp - 4]          ; 相対軸の積算値(sum)
+        add eax, [edi - 4]          ; 相対軸の積算値を更新(sum += 相対軸の長さ)
+
+        mov ebx, [esi - 4]          ; 基準軸の長さ
+        cmp eax, ebx
+        jl .SUM_REL_END             ; 相対軸 < 基準軸
+        sub eax, ebx                ; 超過分を計算
+
+        mov ebx, [edi - 8]
+        add [edi - 0], ebx          ; 相対軸方向に1ドット更新
+.SUM_REL_END:
+        mov [ebp - 4], eax          ; 相対軸の積算値に超過分を保存
+
         dec ecx
         jmp .LINE_BEGIN
 .LINE_END:
