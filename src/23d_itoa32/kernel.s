@@ -44,9 +44,32 @@ kernel:
         cdecl draw_pixel,  9, 10, 0x02
         cdecl draw_pixel,  8, 11, 0x02
 
+        ; ** 数値文字列変換のテスト
+        cdecl itoa, 0, .s1, 16, 10, 0b0000       ; #1 ok
+        cdecl draw_str, 25, 15, 0x0F, .s1
+
+        cdecl itoa, 8086, .s1, 16, 10, 0b0010    ; #2 ok
+        cdecl draw_str, 25, 16, 0x0F, .s1
+
+        cdecl itoa, -1, .s1, 16, 10, 0b0000      ; #3
+        cdecl draw_str, 25, 17, 0x0F, .s1
+
+        cdecl itoa, -1, .s1, 16, 10, 0b0001      ; #4 ok
+        cdecl draw_str, 25, 18, 0x0F, .s1
+
+        cdecl itoa, -1, .s1, 16, 16, 0b0010      ; #5 ok
+        cdecl draw_str, 25, 19, 0x0F, .s1
+
+        cdecl itoa, 12, .s1, 16, 2, 0b0000       ; #6 ok
+        cdecl draw_str, 25, 20, 0x0F, .s1
+
+        cdecl itoa, 9, .s1, 16, 8, 0b0000        ; #7 ok
+        cdecl draw_str, 25, 21, 0x0F, .s1
+
         jmp $
 
 .s0:    db " Hello, Kernel ! ", 0
+.s1:    db "ZZZZZZZZZZZZZZZZ", 0
 
 
 ALIGN 4, db 0
@@ -58,6 +81,7 @@ FONT:   dd 0                                ; フォントアドレス保持先
 %include "modules/protect/draw_str.s"
 %include "modules/protect/draw_color_bar.s"
 %include "modules/protect/draw_pixel.s"
+%include "modules/protect/itoa.s"
 
 ;********************************************************************************
 ; パディング(8kB)
