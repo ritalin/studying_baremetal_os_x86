@@ -29,10 +29,6 @@ kernel:
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
 
-        ; ** 時刻の表示
-        cdecl get_rtc_time, RTC_TIME
-        cdecl draw_time, 72, 0, 0x0700, dword [RTC_TIME]
-
         ; ** ドットを描画する
         cdecl draw_pixel,  8,  4, 0x01
         cdecl draw_pixel,  9,  5, 0x01
@@ -78,7 +74,12 @@ kernel:
         cdecl draw_rect, 150, 150, 250, 100, 0x05
         cdecl draw_rect, 300, 100, 50, 300, 0x06
 
-        jmp $
+.UPDATE_TIME:
+        ; ** 時刻の表示
+        cdecl get_rtc_time, RTC_TIME
+        cdecl draw_time, 72, 0, 0x0700, dword [RTC_TIME]
+
+        jmp .UPDATE_TIME
 
 .s0:    db " Hello, Kernel ! ", 0
 

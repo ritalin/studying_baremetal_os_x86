@@ -19,13 +19,13 @@ draw_time:
         mov eax, [ebp + 20]
 
         movzx ebx, al                           ; 秒
-        cdecl itoa, ebx, .sec, 2, 10, 0b0010
+        cdecl itoa, ebx, .sec, 2, 16, 0b0010
 
         mov bl, ah                              ; 分
-        cdecl itoa, ebx, .min, 2, 10, 0b0010
+        cdecl itoa, ebx, .min, 2, 16, 0b0010
 
         shr eax, 16                             ; 時
-        cdecl itoa, eax, .hour, 2, 10, 0b0010
+        cdecl itoa, eax, .hour, 2, 16, 0b0010
 
         cdecl draw_str, dword [ebp + 8], dword [ebp + 12], dword [ebp + 16], .time
 
