@@ -52,18 +52,7 @@ draw_line:
         jmp .DIR_Y_END
 .GE_Y1:
         mov edi, 1                  ; y0 <= y1の場合
-.DIR_Y_END:
-
-        cdecl itoa, esi, .s0b, 2, 10, 0b0011
-        cdecl itoa, ebx, .s0d, 3, 10, 0b0010
-        cdecl draw_char, 25, 16, 0x0F, 'X'
-        cdecl draw_str, 25, 17, 0x0F, .s0
-
-        cdecl itoa, edi, .s0b, 2, 10, 0b0011
-        cdecl itoa, edx, .s0d, 3, 10, 0b0010
-        cdecl draw_char, 25, 18, 0x0F, 'Y'
-        cdecl draw_str, 25, 19, 0x0F, .s0
-        
+.DIR_Y_END:        
         ; ** 初期位置をローカル変数に保存
         mov [ebp -  8], eax         ; X
         mov [ebp - 12], ebx
@@ -79,24 +68,11 @@ draw_line:
         lea esi, [ebp - 20]         ; 基準軸: Y軸
         lea edi, [ebp - 8]          ; 相対軸: X軸
 
-        mov [.s1b], byte 'Y'
-        mov [.s1d], byte 'X'
-        cdecl draw_str, 25, 20, 0x0F, .s1
-
         jmp .AXIS_END
 .AXIS_X:
         lea esi, [ebp - 8]          ; 基準軸: X軸
         lea edi, [ebp - 20]         ; 相対軸: Y軸
-        
-        mov [.s1b], byte 'X'
-        mov [.s1d], byte 'Y'
-        cdecl draw_str, 25, 20, 0x0F, .s1
 .AXIS_END:
-
-        cdecl itoa, dword [esi], .s2b, 3, 10, 0b0000
-        cdecl itoa, dword [edi], .s2d, 3, 10, 0b0000
-        cdecl draw_str, 25, 21, 0x0F, .s2
-
         ; 基準軸の繰り返し回数
         mov ecx, [esi - 4]          ; 基準軸のローカル変数の一つ下に長さのローカル変数
         cmp ecx, 0
