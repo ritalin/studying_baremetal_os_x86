@@ -52,13 +52,13 @@ draw_line:
         mov edi, 1                  ; y0 <= y1の場合
 .DIR_Y_END:
 
-        cdecl itoa, esi, .s0a, 2, 10, 0b0011
-        cdecl itoa, ebx, .s0c, 3, 10, 0b0010
+        cdecl itoa, esi, .s0b, 2, 10, 0b0011
+        cdecl itoa, ebx, .s0d, 3, 10, 0b0010
         cdecl draw_char, 25, 16, 0x0F, 'X'
         cdecl draw_str, 25, 17, 0x0F, .s0
 
-        cdecl itoa, edi, .s0a, 2, 10, 0b0011
-        cdecl itoa, edx, .s0c, 3, 10, 0b0010
+        cdecl itoa, edi, .s0b, 2, 10, 0b0011
+        cdecl itoa, edx, .s0d, 3, 10, 0b0010
         cdecl draw_char, 25, 18, 0x0F, 'Y'
         cdecl draw_str, 25, 19, 0x0F, .s0
         
@@ -69,6 +69,27 @@ draw_line:
         mov [ebp - 16], ecx
         mov [ebp - 20], edx
         mov [ebp - 24], edi 
+
+        ; ** 基準軸・相対軸を決定する
+.AXIS_BEGIN:
+        cmp ebx, edx                ;
+        jg .AXIS_X                  ; X方向長さ > Y方向長さ
+        mov esi, ecx                ; 基準軸: Y軸
+        mov edi, eax                ; 相対軸: X軸
+
+        mov [.s1b], byte 'Y'
+        mov [.s1d], byte 'X'
+        cdecl draw_str, 25, 20, 0x0F, .s1
+
+        jmp .AXIS_END
+.AXIS_X:
+        mov esi, eax                ; 基準軸: X軸
+        mov edi, ecx                ; 相対軸: Y軸
+        
+        mov [.s1b], byte 'X'
+        mov [.s1d], byte 'Y'
+        cdecl draw_str, 25, 20, 0x0F, .s1
+.AXIS_END:
 
 ;**** レジスタの復帰 **** 
         pop edi
@@ -85,7 +106,14 @@ draw_line:
         pop ebp
         ret
 
-.s0:    db "Dir="
-.s0a:   db "  ", " "
-.s0b:   db "Len="
-.s0c    db "   ", 0
+.s0:    
+.s0a:   db "Dir="
+.s0b:   db "  ", " "
+.s0c:   db "Len="
+.s0d    db "   ", 0
+
+.s1: 
+.s1a:   db "Abs="
+.s1b:   db " ", " "
+.s1c:   db "Rel="
+.s1d:   db " ", 0 
