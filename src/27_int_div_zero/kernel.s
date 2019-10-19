@@ -12,6 +12,9 @@ LINR_ORIGIN_Y equ 16
 ; エントリポイント
 ;********************************************************************************
 kernel:
+        ; ** IDTRを初期化する
+        cdecl init_int
+
         ; ** フォントアドレスを取得する **
         mov esi, BOOT_LOAD + SECT_SIZE      ; ESI = 0x7c00 + 512
         movzx eax, word [esi + font.seg]    ; フォントセグメント
@@ -29,8 +32,11 @@ kernel:
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
 
-        ; ** IDTRを初期化する
-        cdecl init_int
+        set_vect 0x00, int_zero_div
+
+        ; ** 0除算による割り込みを発生させる
+        mov al, 0
+        div al
 
         jmp $
 
