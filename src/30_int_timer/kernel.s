@@ -26,13 +26,15 @@ kernel:
         cdecl init_pic
 
         cdecl enable_rtc_int, 0x10              ; 更新サイクル終了割り込み(UIE)を許可する
+        cdecl enable_int_timer0
 
         set_vect 0x00, int_zero_div
+        set_vect 0x20, int_timer
         set_vect 0x21, int_keyboard
         set_vect 0x28, int_rtc
         
         ; ** IMR(割り込みマスクレジスタ)の設定
-        outp 0x21, 0b_1111_1001                 ; スレーブPICを有効にする
+        outp 0x21, 0b_1111_1000                 ; スレーブPICを有効にする
         outp 0xA1, 0b_1111_1110                 ; RTCの割り込みを有効にする
 
         sti
