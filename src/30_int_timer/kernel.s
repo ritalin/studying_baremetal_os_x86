@@ -52,12 +52,17 @@ kernel:
         cdecl draw_time, 72, 0, 0x0700, eax
 
 .KEY_BUFF_BEGIN:
+        ; ** キー入力を一つ消費する
         cdecl read_ring_buff, KEY_BUFF, .key
         cmp eax, 0
         je .KEY_BUF_END
 
-        cdecl draw_key, 2, 29, KEY_BUFF         ; バッファ内の全要素を表示する
+        ; ** キー履歴を表示する
+        cdecl draw_key, 2, 29, KEY_BUFF        
 .KEY_BUF_END:
+        
+        ; ** 回転バーを表示する
+        cdecl draw_rotation_bar, 0, 29
 
         hlt
         jmp .EVENT_LOOP
@@ -83,6 +88,8 @@ RTC_TIME:
 %include "modules/protect/interrupt.s"
 %include "modules/protect/ring_buff.s"
 %include "modules/protect/int_keyboard.s"
+%include "modules/protect/int_timer.s"
+%include "modules/protect/draw_rotation_bar.s"
 
 ;********************************************************************************
 ; パディング(8kB)
