@@ -57,6 +57,10 @@ kernel:
         cdecl draw_time, 72, 0, 0x0700, eax
 
 .KEY_BUFF_BEGIN:
+        cdecl read_ring_buff, KEY_BUFF, .key
+        cmp eax, 0
+        je .KEY_BUF_END
+
         cdecl draw_key, 2, 29, KEY_BUFF         ; バッファ内の全要素を表示する
 .KEY_BUF_END:
 
