@@ -45,16 +45,19 @@ kernel:
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
 
+        ; ** リングバッファにダミーデータを投入
+        cdecl write_ring_buff, KEY_BUFF, word 'X'
+        cdecl write_ring_buff, KEY_BUFF, word 'Y'
+        cdecl write_ring_buff, KEY_BUFF, word 'Z'
+        cdecl write_ring_buff, KEY_BUFF, word 'A'
+
 .EVENT_LOOP:
         ; ** 時刻を表示する
         mov eax, [RTC_TIME]
         cdecl draw_time, 72, 0, 0x0700, eax
 
 .KEY_BUFF_BEGIN:
-        cdecl read_ring_buff, KEY_BUFF, .key
-        cmp eax, 0
-        jmp .KEY_BUF_END
-        cdecl draw_key, 29, 2, KEY_BUFF         ; バッファ内の全要素を表示する
+        cdecl draw_key, 2, 29, KEY_BUFF         ; バッファ内の全要素を表示する
 .KEY_BUF_END:
 
         hlt
@@ -62,6 +65,7 @@ kernel:
 
 .s0:    db " Hello, Kernel! ", 0
 .key:   dd 0
+.s1:    db "__ "
 
 ALIGN 4, db 0
 FONT:   dd 0                                    ; フォントアドレス保持先   
