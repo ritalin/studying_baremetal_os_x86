@@ -64,8 +64,7 @@ kernel:
         jmp .EVENT_LOOP
 
 .s0:    db " Hello, Kernel! ", 0
-.key:   dd 0
-.s1:    db "__ "
+.key:   dd 0                                    ; 取得したキーの保存先
 
 ALIGN 4, db 0
 FONT:   dd 0                                    ; フォントアドレス保持先   

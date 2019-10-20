@@ -55,7 +55,10 @@ write_ring_buff:
 .END
 
 ;**** レジスタの復帰 **** 
-
+        pop esi
+        pop ecx
+        pop ebx
+        
 ;**** スタックフレームの破棄 ****
         mov esp, ebp
         pop ebp
