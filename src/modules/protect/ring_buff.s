@@ -77,7 +77,7 @@ write_ring_buff:
         mov [esi + ring_buff.item + ebx], al
         mov [esi + ring_buff.wp], ecx           ; 書き込み位置を更新する
         mov eax, 1                              ; 戻り値(成功)
-.END
+.END:
 
 ;**** レジスタの復帰 **** 
         pop esi

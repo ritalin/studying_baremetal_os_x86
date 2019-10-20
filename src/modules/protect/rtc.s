@@ -42,7 +42,7 @@ get_rtc_time:
         mov [ebx], eax
 
         mov eax, 0
-.END
+.END:
 
 ;**** レジスタの復帰 **** 
         pop edx
