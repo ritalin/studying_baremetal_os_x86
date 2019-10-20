@@ -13,8 +13,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_29
+run: src_30
 	$(VM) -monitor stdio $(PROGRAM)
+
+.PHONY: src_30
+src_30: 
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/30_int_timer
 
 .PHONY: src_29
 src_29: 
