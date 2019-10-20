@@ -13,6 +13,7 @@ draw_time:
 
 ;**** レジスタの保存 **** 
         push eax
+        push ebx
 
 ;**** 処理の開始 ****
         ; ** 時刻パートの抽出
@@ -30,6 +31,7 @@ draw_time:
         cdecl draw_str, dword [ebp + 8], dword [ebp + 12], dword [ebp + 16], .time
 
 ;**** レジスタの復帰 **** 
+        pop ebx
         pop eax
 
 ;**** スタックフレームの破棄 ****
