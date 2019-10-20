@@ -30,8 +30,9 @@ kernel:
         cdecl draw_color_bar, 63, 4
 
 .UPDATE_RTC_TIME:
-        cdecl get_rtc_time, RTC_TIME
-        
+        pushf
+        call 0x0008:int_rtc
+
         ; ** 時刻を表示する
         mov eax, [RTC_TIME]
         cdecl draw_time, 72, 0, 0x0700, eax
@@ -52,7 +53,6 @@ RTC_TIME:
 %include "modules/protect/draw_color_bar.s"
 %include "modules/protect/draw_time.s"
 %include "modules/protect/itoa.s"
-%include "modules/protect/pic.s"
 %include "modules/protect/rtc.s"
 %include "modules/protect/int_rtc.s"
 
