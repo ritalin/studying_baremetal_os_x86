@@ -20,6 +20,12 @@ kernel:
         add eax, ebx                            ; 実アドレスを計算
         mov [FONT], eax
 
+        ; ** IDTRを初期化する
+        cdecl init_int
+
+        set_vect 0x00, int_zero_div
+        set_vect 0x28, int_rtc
+
         ; ** フォントをを印字
         cdecl draw_font, 63, 13
 
@@ -30,8 +36,8 @@ kernel:
         cdecl draw_color_bar, 63, 4
 
 .UPDATE_RTC_TIME:
-        pushf
-        call 0x0008:int_rtc
+        ; ** 直接割り込みハンドラをキック
+        int 0x28
 
         ; ** 時刻を表示する
         mov eax, [RTC_TIME]
