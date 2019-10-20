@@ -70,8 +70,7 @@ RTC_TIME:
 %include "modules/protect/rtc.s"
 %include "modules/protect/int_rtc.s"
 %include "modules/protect/pic.s"
-
-%include "modules/interrupt.s"
+%include "modules/protect/interrupt.s"
 
 ;********************************************************************************
 ; パディング(8kB)
