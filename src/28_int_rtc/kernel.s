@@ -50,6 +50,7 @@ kernel:
         mov eax, [RTC_TIME]
         cdecl draw_time, 72, 0, 0x0700, eax
 
+        hlt
         jmp .UPDATE_RTC_TIME
 
 .s0:    db " Hello, Kernel! ", 0
