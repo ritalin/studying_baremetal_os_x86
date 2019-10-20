@@ -50,10 +50,18 @@ kernel:
         mov eax, [RTC_TIME]
         cdecl draw_time, 72, 0, 0x0700, eax
 
+.KEY_BUFF_BEGIN:
+        cdecl read_ring_buff, KEY_BUFF, .key
+        cmp eax, 0
+        jmp .KEY_BUF_END
+        cdecl draw_key, 29, 2, KEY_BUFF         ; バッファ内の全要素を表示する
+.KEY_BUF_END:
+
         hlt
         jmp .EVENT_LOOP
 
 .s0:    db " Hello, Kernel! ", 0
+.key:   dd 0
 
 ALIGN 4, db 0
 FONT:   dd 0                                    ; フォントアドレス保持先   
@@ -71,6 +79,8 @@ RTC_TIME:
 %include "modules/protect/int_rtc.s"
 %include "modules/protect/pic.s"
 %include "modules/protect/interrupt.s"
+%include "modules/protect/ring_buff.s"
+%include "modules/protect/int_keyboard.s"
 
 ;********************************************************************************
 ; パディング(8kB)
