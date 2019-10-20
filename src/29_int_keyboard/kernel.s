@@ -28,10 +28,11 @@ kernel:
         cdecl enable_rtc_int, 0x10              ; 更新サイクル終了割り込み(UIE)を許可する
 
         set_vect 0x00, int_zero_div
+        set_vect 0x21, int_keyboard
         set_vect 0x28, int_rtc
         
         ; ** IMR(割り込みマスクレジスタ)の設定
-        outp 0x21, 0b_1111_1011                 ; スレーブPICを有効にする
+        outp 0x21, 0b_1111_1001                 ; スレーブPICを有効にする
         outp 0xA1, 0b_1111_1110                 ; RTCの割り込みを有効にする
 
         sti
@@ -44,12 +45,6 @@ kernel:
 
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
-
-        ; ** リングバッファにダミーデータを投入
-        cdecl write_ring_buff, KEY_BUFF, word 'X'
-        cdecl write_ring_buff, KEY_BUFF, word 'Y'
-        cdecl write_ring_buff, KEY_BUFF, word 'Z'
-        cdecl write_ring_buff, KEY_BUFF, word 'A'
 
 .EVENT_LOOP:
         ; ** 時刻を表示する
