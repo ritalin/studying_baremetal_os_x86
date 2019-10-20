@@ -22,10 +22,14 @@ kernel:
 
         ; ** IDTRを初期化する
         cdecl init_int
+        ; ** PICを初期化する
+        cdecl init_pic
 
         set_vect 0x00, int_zero_div
         set_vect 0x28, int_rtc
 
+        sti
+        
         ; ** フォントをを印字
         cdecl draw_font, 63, 13
 
@@ -61,6 +65,7 @@ RTC_TIME:
 %include "modules/protect/itoa.s"
 %include "modules/protect/rtc.s"
 %include "modules/protect/int_rtc.s"
+%include "modules/protect/pic.s"
 
 %include "modules/interrupt.s"
 
