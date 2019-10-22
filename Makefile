@@ -15,8 +15,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_33
+run: src_34
 	$(VM) -monitor stdio $(PROGRAM)
+
+.PHONY: src_34
+src_34: 
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/34_call_gate
 
 .PHONY: src_33
 src_33: 
