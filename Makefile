@@ -4,6 +4,8 @@ VM := qemu-system-i386
 SRC_DIR := src
 OUT_DIR := _build
 
+SRC := boot.s kernel.s
+
 ASM_SEARCH_PATH := $(SRC_DIR)
 
 PROGRAM := $(OUT_DIR)/boot.img
@@ -88,11 +90,9 @@ src_16:
 src_15: 
 	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/15_load_kernel
 
-# src_14以降のビルド後は複数の成果物ができてしまうため、先に *make clean* を行うこと
-
 .PHONY: src_14
 src_14: 
-	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/14_a20
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/14_a20 SRC=boot.s
 
 .PHONY: src_12
 src_12:
@@ -138,7 +138,7 @@ src_01:
 src_00:
 	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/00_boot_only
 
-$(PROGRAM): $(foreach f,$(notdir $(patsubst %.s,%.bin, $(wildcard $(PROJECT)/*.s))),$(OUT_DIR)/$(f))
+$(PROGRAM): $(foreach f,$(patsubst %.s,%.bin, $(SRC)),$(OUT_DIR)/$(f)) 
 	cat $^ > $(PROGRAM)
 
 $(OUT_DIR)/%.bin: $(PROJECT)/%.s
