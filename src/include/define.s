@@ -11,8 +11,12 @@ KERNEL_SECT equ (KERNEL_SIZE / SECT_SIZE)
 
 BOOT_END equ (BOOT_LOAD + BOOT_SIZE)
 
-VECT_BASE equ 0x0010_0000                   ; 割り込みベクタテーブル
+VECT_BASE equ 0x0010_0000                       ; 割り込みベクタテーブル
 
-RING_ITEM_SIZE equ (1 << 4)                 ; リングバッファサイズ
+RING_ITEM_SIZE equ (1 << 4)                     ; リングバッファサイズ
 RING_INDEX_MASK equ (RING_ITEM_SIZE - 1)
 
+STACK_BASE equ 0x0010_3000
+STACK_SIZE equ 1024
+
+SP_TASK_00 equ 0x0010_3000 + (STACK_SIZE * 1)   ; カーネルタスク用スタックアドレス
