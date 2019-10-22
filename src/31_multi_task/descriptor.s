@@ -44,8 +44,8 @@ TSS_01:                                 ; テストタスク
 .ecx:       dd 0
 .edx:       dd 0
 .ebx:       dd 0
-.esp:       dd 0
-.ebp:       dd SP_TASK_01
+.esp:       dd SP_TASK_01
+.ebp:       dd 0
 .esi:       dd 0
 .edi:       dd 0
 .es:        dd DS_TASK_01
