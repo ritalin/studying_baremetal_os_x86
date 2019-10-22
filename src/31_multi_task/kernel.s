@@ -63,6 +63,9 @@ kernel:
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
 
+        ; テストタスクへスイッチさせる
+        call SS_TASK_01:0               ; 実行アドレスはTSS_01.eipを使用する
+
 .EVENT_LOOP:
         ; ** 時刻を表示する
         mov eax, [RTC_TIME]
