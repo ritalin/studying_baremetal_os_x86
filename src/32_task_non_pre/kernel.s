@@ -71,7 +71,7 @@ kernel:
         ; ** キー履歴を表示する
         cdecl draw_key, 2, 29, KEY_BUFF        
 .KEY_BUF_END:
-        
+
         ; ** 回転バーを表示する
         cdecl draw_rotation_bar, 0, 29
 
@@ -93,9 +93,13 @@ RTC_TIME:
 %include "tasks/task_01.s"
 
 ;********************************************************************************
+; 割り込み
+;********************************************************************************
+%include "modules/int_timer.s"
+
+;********************************************************************************
 ; モジュール
 ;********************************************************************************
-
 %include "modules/protect/vga.s"
 %include "modules/protect/draw_char.s"
 %include "modules/protect/draw_font.s"
@@ -109,7 +113,6 @@ RTC_TIME:
 %include "modules/protect/interrupt.s"
 %include "modules/protect/ring_buff.s"
 %include "modules/protect/int_keyboard.s"
-%include "modules/protect/int_timer.s"
 %include "modules/protect/draw_rotation_bar.s"
 
 ;********************************************************************************

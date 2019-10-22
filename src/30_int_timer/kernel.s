@@ -77,6 +77,14 @@ FONT:   dd 0                                    ; フォントアドレス保持
 RTC_TIME:
         dd 0                                    ; 時刻の保存先
 
+;********************************************************************************
+; 割り込み
+;********************************************************************************
+%include "modules/int_timer.s"
+
+;********************************************************************************
+; モジュール
+;********************************************************************************
 %include "modules/protect/vga.s"
 %include "modules/protect/draw_char.s"
 %include "modules/protect/draw_font.s"
@@ -90,7 +98,6 @@ RTC_TIME:
 %include "modules/protect/interrupt.s"
 %include "modules/protect/ring_buff.s"
 %include "modules/protect/int_keyboard.s"
-%include "modules/protect/int_timer.s"
 %include "modules/protect/draw_rotation_bar.s"
 
 ;********************************************************************************
