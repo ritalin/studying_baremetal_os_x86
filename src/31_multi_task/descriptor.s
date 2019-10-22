@@ -87,5 +87,5 @@ LDT:        dq 00_0_0_0_0_000000_0000h  ; NULL
 .ldt_end:
 
 LDT_LIMIT   equ LDT.ldt_end - LDT
-CS_TASK_01  equ LDT.cs_taks_01 - LDT
-DS_TASK_01  equ LDT.ds_taks_01 - LDT
+CS_TASK_01  equ (LDT.cs_taks_01 - LDT) | 4
+DS_TASK_01  equ (LDT.ds_taks_01 - LDT) | 4
