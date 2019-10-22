@@ -20,6 +20,10 @@ kernel:
         add eax, ebx                            ; 実アドレスを計算
         mov [FONT], eax
 
+        ; GDTにLDTのアドレスを設定する
+        set_desc GDT.ldt, LDT, word LDT_LIMIT   ; LDTの上限数はGDT同様64k (セグメントレジスタが16bitのため)
+
+        ; GDTRをリロードする
         lgdt [GDTR]
 
         ; ** IDTRを初期化する
