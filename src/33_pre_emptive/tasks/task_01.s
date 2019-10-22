@@ -15,7 +15,7 @@ task_01:
         mov eax, [RTC_TIME]
         cdecl draw_time, 72, 0, 0x0700, eax
 
-        jmp SS_TASK_00:0
+;        jmp SS_TASK_00:0
         hlt
         jmp .LOOP
 

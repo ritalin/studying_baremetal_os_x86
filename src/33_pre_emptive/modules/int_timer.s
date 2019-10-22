@@ -20,6 +20,18 @@ int_timer:
         ; ** 割り込みフラグをクリアする
         outp 0x20, 0x20
 
+        ; ** タスク切り替え
+        str ax
+.TASK_SWICTH_BEGIN:
+        cmp ax, SS_TASK_01
+        je .TASK_01
+.TASK_00:
+        jmp SS_TASK_01:0
+        jmp .TASK_SWICTH_END
+.TASK_01:
+        jmp SS_TASK_00:0
+.TASK_SWICTH_END:
+
 ;**** レジスタの復帰 **** 
         pop es
         pop ds
