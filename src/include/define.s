@@ -19,4 +19,5 @@ RING_INDEX_MASK equ (RING_ITEM_SIZE - 1)
 STACK_BASE equ 0x0010_3000
 STACK_SIZE equ 1024
 
-SP_TASK_00 equ 0x0010_3000 + (STACK_SIZE * 1)   ; カーネルタスク用スタックアドレス
+SP_TASK_00 equ STACK_BASE + (STACK_SIZE * 1)    ; カーネルタスク用スタックアドレス
+SP_TASK_01 equ STACK_BASE + (STACK_SIZE * 2)    ; タスク1用スタックアドレス

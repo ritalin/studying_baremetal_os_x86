@@ -22,6 +22,7 @@ kernel:
 
         ; GDTのTSSのアドレスを設定する
         set_desc GDT.tss_00, TSS_00
+        set_desc GDT.tss_01, TSS_01
 
         ; GDTにLDTのアドレスを設定する
         set_desc GDT.ldt, LDT, word LDT_LIMIT   ; LDTの上限数は64k (LDTRが16bitのため)
@@ -95,6 +96,7 @@ RTC_TIME:
 ; タスク
 ;********************************************************************************
 %include "descriptor.s"
+%include "tasks/task_01.s"
 
 ;********************************************************************************
 ; モジュール
