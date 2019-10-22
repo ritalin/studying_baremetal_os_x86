@@ -82,10 +82,10 @@ SS_TASK_01  equ GDT.tss_01 - GDT        ; タスク1のオフセット
 LDT:        dq 00_0_0_0_0_000000_0000h  ; NULL
 .cs_taks_00:dq 00_C_F_9_A_000000_FFFFh  ; カーネルタスク用のため領域はGDTと共有
 .ds_taks_00:dq 00_C_F_9_2_000000_FFFFh  ; カーネルタスク用のため領域はGDTと共有
-.cs_taks_01:dq 00_C_F_9_A_000000_FFFFh  ; タスク1用(CODE)
-.ds_taks_01:dq 00_C_F_9_2_000000_FFFFh  ; タスク1用(DATA)
+.cs_taks_01:dq 00_C_F_F_A_000000_FFFFh  ; タスク1用(CODE)
+.ds_taks_01:dq 00_C_F_F_2_000000_FFFFh  ; タスク1用(DATA)
 .ldt_end:
 
 LDT_LIMIT   equ LDT.ldt_end - LDT
-CS_TASK_01  equ (LDT.cs_taks_01 - LDT) | 4
-DS_TASK_01  equ (LDT.ds_taks_01 - LDT) | 4
+CS_TASK_01  equ (LDT.cs_taks_01 - LDT) | 4 | 3
+DS_TASK_01  equ (LDT.ds_taks_01 - LDT) | 4 | 3
