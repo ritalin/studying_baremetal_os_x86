@@ -30,7 +30,11 @@ draw_str:
         cmp al, 0
         je .END
 
+%ifdef USE_SYSTEM_CALL
+        int 0x81                                ; トラップゲートを介して文字列を出力
+%else
         cdecl draw_char, ecx, edx, ebx, eax
+%endif
 
         inc ecx
         cmp ecx, 80

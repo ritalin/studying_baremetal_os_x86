@@ -1,3 +1,5 @@
+%define USE_SYSTEM_CALL
+
 %include "include/define.s"
 %include "include/macro.s"
 
@@ -46,7 +48,9 @@ kernel:
         set_vect 0x20, int_timer
         set_vect 0x21, int_keyboard
         set_vect 0x28, int_rtc
-        
+        set_vect 0x81, trap_gate_81, word 0xEF00     ; トラップゲート(81)を登録する
+        set_vect 0x82, trap_gate_82, word 0xEF00     ; トラップゲート(82)を登録する
+
         ; ** IMR(割り込みマスクレジスタ)の設定
         outp 0x21, 0b_1111_1000                 ; スレーブPICを有効にする
         outp 0xA1, 0b_1111_1110                 ; RTCの割り込みを有効にする
@@ -119,6 +123,7 @@ RTC_TIME:
 %include "modules/protect/draw_rotation_bar.s"
 
 %include "modules/protect/call_gate.s"
+%include "modules/protect/trap_gate.s"
 
 ;********************************************************************************
 ; パディング(8kB)
