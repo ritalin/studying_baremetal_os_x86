@@ -7,9 +7,14 @@ task_01:
 ;**** レジスタの保存 **** 
     
 ;**** 処理の開始 ****
+        ; ** コールゲートを介して文字列を描画する
+        cdecl SS_GATE_00:0, 63, 0, 0x07, .s0
 
 .LOOP:
-        jmp .LOOP
+        ; ** 時刻を表示する
+;        mov eax, [RTC_TIME]
+;        cdecl draw_time, 72, 0, 0x0700, eax
+       jmp .LOOP
 
 ;**** レジスタの復帰 **** 
 

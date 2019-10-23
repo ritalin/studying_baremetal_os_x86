@@ -16,17 +16,20 @@ kernel:
         add eax, ebx                            ; 実アドレスを計算
         mov [FONT], eax
 
-        ; GDTのTSSのアドレスを設定する
+        ; ** GDTのTSSのアドレスを設定する
         set_desc GDT.tss_00, TSS_00
         set_desc GDT.tss_01, TSS_01
 
-        ; GDTにLDTのアドレスを設定する
+        ; ** GDTにコールゲートアドレスを設定する
+        set_call_gate_desc GDT.call_gate, call_gate
+
+        ; ** GDTにLDTのアドレスを設定する
         set_desc GDT.ldt, LDT, word LDT_LIMIT   ; LDTの上限数は64k (LDTRが16bitのため)
 
-        ; GDTRをリロードする
+        ; ** GDTRをリロードする
         lgdt [GDTR]
 
-        ; カーネルタスクに載せる
+        ; ** カーネルタスクに載せる
         mov esp, SP_TASK_00
         mov ax, SS_TASK_00
         ltr ax
@@ -114,6 +117,8 @@ RTC_TIME:
 %include "modules/protect/ring_buff.s"
 %include "modules/protect/int_keyboard.s"
 %include "modules/protect/draw_rotation_bar.s"
+
+%include "modules/protect/call_gate.s"
 
 ;********************************************************************************
 ; パディング(8kB)
