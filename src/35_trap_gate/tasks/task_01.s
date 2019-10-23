@@ -12,8 +12,8 @@ task_01:
 
 .LOOP:
         ; ** 時刻を表示する
-;        mov eax, [RTC_TIME]
-;        cdecl draw_time, 72, 0, 0x0700, eax
+        mov eax, [RTC_TIME]
+        cdecl draw_time, 72, 0, 0x0700, eax
        jmp .LOOP
 
 ;**** レジスタの復帰 **** 
