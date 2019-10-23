@@ -22,6 +22,10 @@ draw_char:
         shl esi, 4
         add esi, [FONT]                         ; ESI = フォントアドレス
 
+%ifdef USE_TEST_AND_SET
+        cdecl test_and_set, IN_USE              ; リソースの空き待ちを行う
+%endif
+
         ; ** VRAMアドレスの決定
         mov edi, [ebp + 12]
         shl edi, 8
@@ -50,6 +54,10 @@ draw_char:
         cdecl select_vga_write_plane, 0x01          ; [____ ___B]
         cdecl copy_vram_font, esi, edi, 0x01, ebx
 
+%ifdef USE_TEST_AND_SET
+        mov [IN_USE], dword 0                       ; リソースの空き待ちを行う
+%endif
+
 ;**** レジスタの復帰 **** 
         pop edi
         pop esi
@@ -59,3 +67,6 @@ draw_char:
         mov esp, ebp
         pop ebp
         ret
+
+ALIGN 4, db 0
+IN_USE: dd 0
