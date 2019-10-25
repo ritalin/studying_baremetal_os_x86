@@ -28,6 +28,7 @@ TSS_00:                                 ; カーネル用タスク
 .gs:        dd 0
 .ldt:       dd 0
 .io:        dd 0
+.fp_save:   times 108 + 4 dd 0          ; FPUコンテキスト保存領域
 
 TSS_01:                                 ; テストタスク
 .link:      dd 0
@@ -56,6 +57,7 @@ TSS_01:                                 ; テストタスク
 .gs:        dd DS_TASK_01
 .ldt:       dd SS_LDT
 .io:        dd 0
+.fp_save:   times 108 + 4 dd 0          ; FPUコンテキスト保存領域
 
 
 TSS_02:                                 ; テストタスク2
@@ -85,6 +87,7 @@ TSS_02:                                 ; テストタスク2
 .gs:        dd DS_TASK_02
 .ldt:       dd SS_LDT
 .io:        dd 0
+.fp_save:   times 108 + 4 dd 0          ; FPUコンテキスト保存領域
 
 ;********************************************************************************
 ; グローバルデスクリプタ
