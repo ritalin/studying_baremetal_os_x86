@@ -25,10 +25,16 @@ int_timer:
 .TASK_SWICTH_BEGIN:
         cmp ax, SS_TASK_01
         je .TASK_01
+
+        cmp ax, SS_TASK_02
+        je .TASK_02
 .TASK_00:
         jmp SS_TASK_01:0
         jmp .TASK_SWICTH_END
 .TASK_01:
+        jmp SS_TASK_02:0
+        jmp .TASK_SWICTH_END
+.TASK_02:
         jmp SS_TASK_00:0
 .TASK_SWICTH_END:
 

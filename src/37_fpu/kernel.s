@@ -22,6 +22,7 @@ kernel:
         ; ** GDTのTSSのアドレスを設定する
         set_desc GDT.tss_00, TSS_00
         set_desc GDT.tss_01, TSS_01
+        set_desc GDT.tss_02, TSS_02
 
         ; ** GDTにコールゲートアドレスを設定する
         set_call_gate_desc GDT.call_gate, call_gate
@@ -49,8 +50,8 @@ kernel:
         set_vect 0x20, int_timer
         set_vect 0x21, int_keyboard
         set_vect 0x28, int_rtc
-        set_vect 0x81, trap_gate_81, word 0xEF00     ; トラップゲート(81)を登録する
-        set_vect 0x82, trap_gate_82, word 0xEF00     ; トラップゲート(82)を登録する
+        set_vect 0x81, trap_gate_81, word 0xEF00    ; トラップゲート(81)を登録する
+        set_vect 0x82, trap_gate_82, word 0xEF00    ; トラップゲート(82)を登録する
 
         ; ** IMR(割り込みマスクレジスタ)の設定
         outp 0x21, 0b_1111_1000                 ; スレーブPICを有効にする
@@ -99,6 +100,7 @@ RTC_TIME:
 ;********************************************************************************
 %include "descriptor.s"
 %include "tasks/task_01.s"
+%include "tasks/task_02.s"
 
 ;********************************************************************************
 ; 割り込み
