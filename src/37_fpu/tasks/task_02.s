@@ -5,7 +5,7 @@ task_02:
 ;**** スタックフレームの構築 **** 
                             ;      0| EIP (caller)
 ;**** レジスタの保存 **** 
-    
+         
 ;**** 処理の開始 ****
         ; ** コールゲートを介して文字列を描画する
         cdecl SS_GATE_00:0, 63, 1, 0x07, .s0
@@ -15,6 +15,25 @@ task_02:
                                     ; ---------+---------+---------|---------|---------|---------|
         fild dword [.c1000]         ;     1000 |xxxxxxxxx|xxxxxxxxx|xxxxxxxxx|xxxxxxxxx|xxxxxxxxx|
                                     ; ---------+---------+---------|---------|---------|---------|
+
+        ; ** 計算結果の表示
+        fbstp [.bcd]
+        mov eax, [.bcd]
+        mov ebx, eax
+
+        and eax, 0x0F0F
+        or eax, 0x3030
+
+        shr ebx, 4
+        and ebx, 0x0F0F
+        or ebx, 0x3030
+
+        mov [.s1], bh
+        mov [.s2 + 0], ah
+        mov [.s2 + 1], bl
+        mov [.s2 + 2], al
+
+        cdecl draw_str, 72, 1, 0x07, .s1
 .LOOP:
        jmp .LOOP
 
@@ -23,4 +42,8 @@ task_02:
 ;**** スタックフレームの破棄 ****
 
 .s0:    db "Task-2", 0
+.s1:    db " "
+.s2:    db "  "
+.s3:    db "    ", 0
 .c1000: dd 1000
+.bcd:   times 10 db 0x00
