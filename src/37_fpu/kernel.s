@@ -47,6 +47,7 @@ kernel:
         cdecl enable_int_timer0
 
         set_vect 0x00, int_zero_div
+        set_vect 0x07, int_nm                       ; デバイス使用不可の割り込みを登録
         set_vect 0x20, int_timer
         set_vect 0x21, int_keyboard
         set_vect 0x28, int_rtc
@@ -128,6 +129,8 @@ RTC_TIME:
 
 %include "modules/protect/call_gate.s"
 %include "modules/protect/trap_gate.s"
+
+%include "modules/protect/int_nm.s"
 
 ;********************************************************************************
 ; パディング(8kB)
