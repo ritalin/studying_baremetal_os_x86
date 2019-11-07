@@ -16,7 +16,7 @@ all: ;
 
 .PHONY: run
 run: src_37
-	$(VM) -monitor stdio $(PROGRAM)
+	$(VM) -monitor stdio -m size=256 -drive file=$(PROGRAM),format=raw -boot order=c -rtc base=localtime
 
 .PHONY: src_37
 src_37: 
