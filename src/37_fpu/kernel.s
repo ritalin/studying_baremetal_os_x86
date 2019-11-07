@@ -131,6 +131,7 @@ RTC_TIME:
 %include "modules/protect/trap_gate.s"
 
 %include "modules/protect/int_nm.s"
+%include "modules/protect/wait_tick.s"
 
 ;********************************************************************************
 ; パディング(8kB)

@@ -25,10 +25,13 @@ int_nm:
 
         cli
 
-        ; ** FPU初回利用かどうか
 .SWITCH_FPU_BEGIN:
+        ; ** FPU初回利用かどうか
+        cmp     edi, 0                          
+        je      .RESTORE_FPU                            
+                                                
         cmp esi, edi
-        je .RESTORE_FPU
+        je .SWITCH_FPU_END
 .SAVE_FPU:
         ; ** 前回のFPUコンテキストを保存する
         mov ebx, edi
