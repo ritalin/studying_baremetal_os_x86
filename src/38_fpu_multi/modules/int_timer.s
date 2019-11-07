@@ -35,6 +35,8 @@ int_timer:
         jmp SS_TASK_02:0
         jmp .TASK_SWICTH_END
 .TASK_02:
+        jmp SS_TASK_03:0
+.TASK_03:
         jmp SS_TASK_00:0
 .TASK_SWICTH_END:
 

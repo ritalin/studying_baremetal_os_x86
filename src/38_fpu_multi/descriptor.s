@@ -140,6 +140,7 @@ SS_LDT      equ GDT.ldt - GDT           ; LDTデスクリプタのオフセッ�
 SS_TASK_00  equ GDT.tss_00 - GDT        ; カーネルタスクのオフセット
 SS_TASK_01  equ GDT.tss_01 - GDT        ; タスク1のオフセット
 SS_TASK_02  equ GDT.tss_02 - GDT        ; タスク2のオフセット
+SS_TASK_03  equ GDT.tss_03 - GDT        ; タスク3のオフセット
 SS_GATE_00  equ GDT.call_gate - GDT     ; コールゲートへのオフセット
 
 ;********************************************************************************
