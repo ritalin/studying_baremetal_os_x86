@@ -22,3 +22,4 @@ STACK_SIZE equ 1024
 SP_TASK_00 equ STACK_BASE + (STACK_SIZE * 1)    ; カーネルタスク用スタックアドレス
 SP_TASK_01 equ STACK_BASE + (STACK_SIZE * 2)    ; タスク1用スタックアドレス
 SP_TASK_02 equ STACK_BASE + (STACK_SIZE * 3)    ; タスク2用スタックアドレス
+SP_TASK_03 equ STACK_BASE + (STACK_SIZE * 4)    ; タスク3用スタックアドレス
