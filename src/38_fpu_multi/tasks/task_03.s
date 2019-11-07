@@ -21,7 +21,7 @@ task_03:
                                     ; ------------+---------+---------|---------|---------|---------|
 
         ; ** 計算結果の表示
-        cdecl task_03_draw_bcd, .bcd
+        cdecl draw_fpu_bcd, 72, 2, .bcd
 
         cdecl wait_tick, 20
         jmp .LOOP_FPU
@@ -92,61 +92,3 @@ task_03_calc:
         mov esp, ebp
         pop ebp
         ret
-
-;********************************************************************************
-; void task_03_draw_bcd(bcd)
-;********************************************************************************
-task_03_draw_bcd:
-                            ;     +8| bcdの先頭アドレス
-                            ;     +4| EIP (caller)
-        push ebp            ; EBP  0| EBP (old)
-        mov ebp, esp
-;**** レジスタの保存 ****
-        push eax
-        push ebx
-        push edx
-
-;**** 処理の開始 ****
-        mov edx, [ebp + 8]
-        mov eax, [edx]
-        mov ebx, eax
-
-        and eax, 0x0F0F
-        or eax, 0x3030
-
-        shr ebx, 4
-        and ebx, 0x0F0F
-        or ebx, 0x3030
-
-        mov [.s2], bh
-        mov [.s3 + 0], ah
-        mov [.s3 + 1], bl
-        mov [.s3 + 2], al
-
-        ; ** 符号の判定
-.SIGN_BEGIN:
-        mov eax, 7
-        bt [edx + 9], eax                  ; [bcd + 9] & 0x80
-        jc .SIGN_MINUS
-.SIGN_PLUS:
-        mov [.s1], byte '+'
-        jmp .SIGN_END
-.SIGN_MINUS:
-        mov [.s1], byte '-'
-.SIGN_END:
-
-        cdecl draw_str, 72, 2, 0x07, .s1
-
-;**** レジスタの復帰 **** 
-        pop edx
-        pop ebx
-        pop eax
-
-;**** スタックフレームの破棄 ****
-        mov esp, ebp
-        pop ebp
-        ret
-
-.s1:    db "-"
-.s2:    db " ."
-.s3:    db "    ", 0

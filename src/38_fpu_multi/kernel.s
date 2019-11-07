@@ -101,6 +101,7 @@ RTC_TIME:
 ; タスク
 ;********************************************************************************
 %include "descriptor.s"
+%include "tasks/task_helper.s"
 %include "tasks/task_01.s"
 %include "tasks/task_02.s"
 %include "tasks/task_03.s"
