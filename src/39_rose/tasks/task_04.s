@@ -4,7 +4,8 @@
 task_04:
 ;**** スタックフレームの構築 **** 
         mov ebp, esp        ; EBP  0| EBP (old)
-
+        push dword 0        ;     -4| 原点(x)   
+        push dword 0        ;     -8| 原点(y)            
 ;**** レジスタの保存 **** 
 
 ;**** 処理の開始 ****
@@ -14,14 +15,52 @@ task_04:
         mov eax, [esi + rose.x0] 
         mov ebx, [esi + rose.y0]
 
-        shr eax, 3                  ; x0 = x0 / 8
-        shr ebx, 4                  ; y0 = y0 / 16
-        dec ebx                     ; --y0
+        shr eax, 3                      ; x0 = x0 / 8
+        shr ebx, 4                      ; y0 = y0 / 16
+        dec ebx                         ; --y0
 
         mov ecx, [esi + rose.color_font]
         lea edx, [esi + rose.title]
 
         cdecl draw_str, eax, ebx, ecx, edx
+
+        ; ** 原点座標の計算 **
+        mov eax, [esi + rose.x0]        ; 左上(x)
+        mov ebx, [esi + rose.width]     ; 枠の幅
+        shr ebx, 1                      ; ebx /= 2
+        add ebx, eax                
+        mov [ebp - 4], ebx              ; 原点(x)を保存
+
+        mov eax, [esi + rose.y0]        ; 左上(y)
+        mov ebx, [esi + rose.height]    ; 枠の高さ
+        shr ebx, 1                      ; ebx /= 2
+        add ebx, eax
+        mov [ebp - 8], ebx              ; 原点(y)を保存
+
+        ; ** 座標軸を描画する **
+
+        mov eax, [esi + rose.x0]        ; x0
+        mov ebx, [ebp - 8]              ; 原点(y)
+        mov ecx, [esi + rose.width]     ; 枠の幅
+        add ecx, eax                    ; x1
+
+        cdecl draw_line, eax, ebx, ecx, ebx, dword [esi + rose.color_axis_x]
+
+        mov eax, [esi + rose.y0]        ; y0
+        mov ebx, [ebp - 4]              ; 原点(x)
+        mov ecx, [esi + rose.height]    ; 枠の高さ
+        add ecx, eax                    ; y1
+
+        cdecl draw_line, ebx, eax, ebx, ecx, dword [esi + rose.color_axis_y]
+
+        ; ** 外枠を描画する **
+
+        mov eax, [esi + rose.x0]        ; x0
+        mov ebx, [esi + rose.y0]        ; y0
+        mov ecx, [esi + rose.width]     ; 枠の幅
+        mov edx, [esi + rose.height]    ; 枠の高さ
+
+        cdecl draw_rect, eax, ebx, ecx, edx, dword [esi + rose.color_frame]
 
 .LOOP_FPU:
         jmp .LOOP_FPU
@@ -33,12 +72,15 @@ task_04:
 ALIGN 4, db 0
 ROSE_PARAM:
     istruc rose 
-        at rose.x0,         dd 16           ; 左上(x)
-        at rose.y0,         dd 32           ; 左上(y)
-        at rose.width,      dd 400          ; 枠の幅
-        at rose.height,     dd 400          ; 枠の高さ
-        at rose.color_font, dd 0x030F       ; 文字色    
-        at rose.title,      db "Task-4", 0  ; キャプション
+        at rose.x0,             dd 16           ; 左上(x)
+        at rose.y0,             dd 32           ; 左上(y)
+        at rose.width,          dd 400          ; 枠の幅
+        at rose.height,         dd 400          ; 枠の高さ
+        at rose.color_font,     dd 0x030F       ; 文字色    
+        at rose.color_axis_x,   dd 0x0007       ; X軸の表示色
+        at rose.color_axis_y,   dd 0x0007       ; Y軸の表示色
+        at rose.color_frame,    dd 0x000F       ; 枠線の色
+        at rose.title,          db "Task-4", 0  ; キャプション
     iend
 
 ;********************************************************************************
