@@ -73,25 +73,25 @@ task_04:
         shr ebx, 4                          ; ebx /= 16
         sub eax, ebx                        ; 15/16 = 0.9375
 
-        cdecl itoa, eax, .a1, 8, 10, 0x0011
-        cdecl draw_str, 2, 5, 0x0003, .a0
+;        cdecl itoa, eax, .a1, 8, 10, 0x0011
+;        cdecl draw_str, 2, 5, 0x0003, .a0
 
         ; ** バラ曲線を初期化する
 
         cdecl prepare_fpu_rose, eax, dword [esi + rose.n], dword [esi + rose.d]
 
-        cdecl itoa, dword [ebp - 4], .ox1, 8, 10, 0x0011
-        cdecl draw_str, 2, 3, 0x0003, .ox0
-        cdecl itoa, dword [ebp - 8], .oy1, 8, 10, 0x0011
-        cdecl draw_str, 2, 4, 0x0003, .oy0
-
-        cdecl itoa, dword [ebp - 12], .sx1, 8, 10, 0x0011
-        cdecl draw_str, 2, 6, 0x0003, .sx0
-        cdecl itoa, dword [ebp - 16], .sy1, 8, 10, 0x0011
-        cdecl draw_str, 2, 7, 0x0003, .sy0
-        cdecl itoa, dword [ebp - 20], .th1, 8, 10, 0x0011
-        cdecl draw_str, 2, 8, 0x0003, .th0
-        cdecl wait_tick, 10
+;        cdecl itoa, dword [ebp - 4], .ox1, 8, 10, 0x0011
+;        cdecl draw_str, 2, 3, 0x0003, .ox0
+;        cdecl itoa, dword [ebp - 8], .oy1, 8, 10, 0x0011
+;        cdecl draw_str, 2, 4, 0x0003, .oy0
+;
+;        cdecl itoa, dword [ebp - 12], .sx1, 8, 10, 0x0011
+;        cdecl draw_str, 2, 6, 0x0003, .sx0
+;        cdecl itoa, dword [ebp - 16], .sy1, 8, 10, 0x0011
+;        cdecl draw_str, 2, 7, 0x0003, .sy0
+;        cdecl itoa, dword [ebp - 20], .th1, 8, 10, 0x0011
+;        cdecl draw_str, 2, 8, 0x0003, .th0
+;        cdecl wait_tick, 10
 
 .LOOP_FPU:
         ; ** 座標を計算する **
@@ -109,20 +109,30 @@ task_04:
         div ebx                             ; edx:eax % ebx
         mov [ebp - 20], edx
 
+        ; ** 座標の点に描画 **
+
         mov ecx, [ebp - 12]
         add ecx, [ebp - 4]                  ; 座標(x)
         mov edx, [ebp - 16]
         add edx, [ebp - 8]                  ; 座標(y)
 
-        ; ** 座標の点に描画 **
+;        cdecl itoa, ecx, .sx1, 8, 10, 0x0011 
+;        cdecl draw_str, 2, 6, 0x0003, .sx0
+;        cdecl itoa, edx, .sy1, 8, 10, 0x0011 
+;        cdecl draw_str, 2, 7, 0x0003, .sy0
+;        cdecl itoa, dword [ebp - 20], .th1, 8, 10, 0x0011 
+;        cdecl draw_str, 2, 8, 0x0003, .th0
+;        cdecl wait_tick, 10
 
-        cdecl itoa, ecx, .sx1, 8, 10, 0x0011 
-        cdecl draw_str, 2, 6, 0x0003, .sx0
-        cdecl itoa, edx, .sy1, 8, 10, 0x0011 
-        cdecl draw_str, 2, 7, 0x0003, .sy0
-        cdecl itoa, dword [ebp - 20], .th1, 8, 10, 0x0011 
-        cdecl draw_str, 2, 8, 0x0003, .th0
-        cdecl wait_tick, 10
+        mov ebx, [esi + rose.color_curve_f] ; カーブ表示色
+
+        int 0x82
+
+        cdecl wait_tick, 1
+
+        mov ebx, [esi + rose.color_curve_b] ; カーブ表示色
+
+        int 0x82
 
         jmp .LOOP_FPU
 
