@@ -120,6 +120,11 @@ RTC_TIME:
 %include "modules/protect/draw_char.s"
 %include "modules/protect/draw_font.s"
 %include "modules/protect/draw_str.s"
+
+%include "modules/protect/draw_pixel.s"
+%include "modules/protect/draw_line.s"
+%include "modules/protect/draw_rect.s"
+
 %include "modules/protect/draw_color_bar.s"
 %include "modules/protect/draw_time.s"
 %include "modules/protect/itoa.s"
