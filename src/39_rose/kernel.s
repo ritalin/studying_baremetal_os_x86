@@ -24,6 +24,7 @@ kernel:
         set_desc GDT.tss_01, TSS_01
         set_desc GDT.tss_02, TSS_02
         set_desc GDT.tss_03, TSS_03
+        set_desc GDT.tss_04, TSS_04
 
         ; ** GDTにコールゲートアドレスを設定する
         set_call_gate_desc GDT.call_gate, call_gate
@@ -105,6 +106,7 @@ RTC_TIME:
 %include "tasks/task_01.s"
 %include "tasks/task_02.s"
 %include "tasks/task_03.s"
+%include "tasks/task_04.s"
 
 ;********************************************************************************
 ; 割り込み

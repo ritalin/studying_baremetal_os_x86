@@ -112,3 +112,17 @@ struc ring_buff
     .wp     resd 1                  ; 書き込み位置
     .item   resb RING_ITEM_SIZE     ; バッファ本体
 endstruc
+
+;********************************************************************************
+; バラ曲線パラメータ定義
+;********************************************************************************
+struc rose 
+    .x0          resd 1             ; 左上(x)
+    .y0          resd 1             ; 左上(y)
+    .width       resd 1             ; 枠の幅
+    .height      resd 1             ; 枠の高さ
+    .color_font  resd 1             ; 文字色    
+    .title       resb 16            ; キャプション
+endstruc
+
+
