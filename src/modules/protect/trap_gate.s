@@ -8,7 +8,7 @@ trap_gate_81:
 
 ;**** 処理の開始 ****
         cli
-        cdecl draw_char, ecx, edx, ebx, eax
+        cdecl draw_char, ecx, edx, ebx, eax     ; 1文字出力する
         sti
 ;**** レジスタの復帰 **** 
 
@@ -24,7 +24,9 @@ trap_gate_82:
 ;**** レジスタの保存 **** 
 
 ;**** 処理の開始 ****
-
+        cli
+        cdecl draw_pixel, ecx, edx, ebx         ; 点を描画する
+        sti
 ;**** レジスタの復帰 **** 
 
 ;**** スタックフレームの破棄 ****

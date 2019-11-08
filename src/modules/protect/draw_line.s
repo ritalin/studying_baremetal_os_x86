@@ -52,7 +52,8 @@ draw_line:
         jmp .DIR_Y_END
 .GE_Y1:
         mov edi, 1                  ; y0 <= y1の場合
-.DIR_Y_END:        
+.DIR_Y_END:
+
         ; ** 初期位置をローカル変数に保存
         mov [ebp -  8], eax         ; X
         mov [ebp - 12], ebx
@@ -73,6 +74,7 @@ draw_line:
         lea esi, [ebp - 8]          ; 基準軸: X軸
         lea edi, [ebp - 20]         ; 相対軸: Y軸
 .AXIS_END:
+
         ; 基準軸の繰り返し回数
         mov ecx, [esi - 4]          ; 基準軸のローカル変数の一つ下に長さのローカル変数
         cmp ecx, 0
@@ -82,7 +84,18 @@ draw_line:
         cmp ecx, 0
         je .LINE_END
 
+%ifdef USE_SYSTEM_CALL
+        mov eax, ecx
+        
+        mov ebx, dword [ebp + 24]
+        mov ecx, dword [ebp - 8]
+        mov edx, dword [ebp - 20]
+        int 0x82                    ; トラップゲートを介して1px描画する
+
+        mov ecx, eax
+%else
         cdecl draw_pixel, dword [ebp - 8], dword [ebp - 20], dword [ebp + 24]
+%endif
 
         mov eax, [esi - 8]          ; 基準軸の更新サイズ
         add [esi - 0], eax          ; 基準軸の位置を更新
@@ -101,8 +114,7 @@ draw_line:
 .SUM_REL_END:
         mov [ebp - 4], eax          ; 相対軸の積算値に超過分を保存
 
-        dec ecx
-        jmp .LINE_BEGIN
+        loop .LINE_BEGIN
 .LINE_END:
 
 ;**** レジスタの復帰 **** 
