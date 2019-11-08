@@ -22,14 +22,17 @@ int_timer:
 
         ; ** タスク切り替え
         str ax
+        
 .TASK_SWICTH_BEGIN:
         cmp ax, SS_TASK_01
         je .TASK_01
 
         cmp ax, SS_TASK_02
         je .TASK_02
+
         cmp ax, SS_TASK_03
         je .TASK_03
+
         cmp ax, SS_TASK_04
         je .TASK_04
         
