@@ -153,8 +153,8 @@ LDT:        dq 00_0_0_0_0_000000_0000h  ; NULL
 .ds_taks_01:dq 00_C_F_F_2_000000_FFFFh  ; タスク1用(DATA)
 .cs_taks_02:dq 00_C_F_F_A_000000_FFFFh  ; タスク2用(CODE)
 .ds_taks_02:dq 00_C_F_F_2_000000_FFFFh  ; タスク2用(DATA)
-.cs_taks_03:dq 00_C_F_F_A_000000_FFFFh  ; タスク2用(CODE)
-.ds_taks_03:dq 00_C_F_F_2_000000_FFFFh  ; タスク2用(DATA)
+.cs_taks_03:dq 00_C_F_F_A_000000_FFFFh  ; タスク3用(CODE)
+.ds_taks_03:dq 00_C_F_F_2_000000_FFFFh  ; タスク3用(DATA)
 .ldt_end:
 
 LDT_LIMIT   equ LDT.ldt_end - LDT
@@ -162,5 +162,5 @@ CS_TASK_01  equ (LDT.cs_taks_01 - LDT) | 4 | 3
 DS_TASK_01  equ (LDT.ds_taks_01 - LDT) | 4 | 3
 CS_TASK_02  equ (LDT.cs_taks_02 - LDT) | 4 | 3
 DS_TASK_02  equ (LDT.ds_taks_02 - LDT) | 4 | 3
-CS_TASK_03  equ (LDT.cs_taks_02 - LDT) | 4 | 3
-DS_TASK_03  equ (LDT.ds_taks_02 - LDT) | 4 | 3
+CS_TASK_03  equ (LDT.cs_taks_03 - LDT) | 4 | 3
+DS_TASK_03  equ (LDT.ds_taks_03 - LDT) | 4 | 3
