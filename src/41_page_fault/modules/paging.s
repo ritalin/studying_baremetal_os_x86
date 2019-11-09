@@ -11,6 +11,9 @@ init_page_table:
         ; ** 4MB分のページテーブルを構成する **
         cdecl set_4m_page, CR3_BASE
 
+        ; ** 0x107*4kB = 0x0010_7000に対するページエントリを無効にする **
+        mov [0x0010_6000 + 0x107 * 4], dword 0  
+
 ;**** レジスタの復帰 **** 
         popa
 
@@ -32,23 +35,25 @@ set_4m_page:
 
 ;**** 処理の開始 ****
         ; ** ページディレクトリを作成する **
+        ; ** 1ページディレクトリで、1024 * 4MB = 4GB( = 32bitの全メモリ空間)の領域が管理可能
         cld                     ; DFクリア
         mov edi, [ebp + 8]
         mov eax, 0x0000_0000
         mov ecx, 1024           ; ディレクトリエントリ数
-    rep stosd                   ; while (ecx--) *edi++
+    rep stosd                   ; while (ecx--) *edi++ = eax
 
-        ; ** 先頭のエントリを作成する **
-        mov eax, edi
-        and eax, ~0x0000_0FFF       ; 物理アドレスの指定
+        ; ** 先頭のページディレクトリエントリを作成する **
+        mov eax, edi                ; ページディレクトリ直後のアドレスを取得
+        and eax, ~0x0000_0FFF       ; 物理アドレスの指定(上位20bit)
         or eax, 0b0111              ; RWの許可
         mov [edi - (1024 * 4)], eax ; 先頭のエントリを割り当てる
 
         ; ** ページテーブルを作成する **
+        ; ** 1ページテーブルで、1024*4kB = 4MBの領域が管理可能 **
         mov eax, 0x0000_0007        ; 物理アドレスとRWの許可
         mov ecx, 1024               ; ページエントリ数
 .LOOP:
-        stosd
+        stosd                       ; *edi++ = eax
         add eax, 0x0000_1000
         loop .LOOP
 
