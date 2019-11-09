@@ -66,7 +66,7 @@ ALIGN 4, db 0
 get_tss_base:
         mov eax, [GDT + ebx + 2]        ; TSSのベースアドレス[0..23]を取得する
         shl eax, 8                      ; 取得結果を退避
-        mov eax, [GDT + ebx + 7]        ; TSSのベースアドレス[24..31]を取得する
+        mov al, [GDT + ebx + 7]         ; TSSのベースアドレス[24..31]を取得する
         ror eax, 8                      ; 上位ビットに移動させる
         ret
 
