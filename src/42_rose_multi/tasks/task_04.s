@@ -158,7 +158,7 @@ task_04:
 
 ALIGN 4, db 0
 ROSE_PARAM:
-.t4:
+.t04:
     istruc rose 
         at rose.x0,             dd 32           ; 左上(x)
         at rose.y0,             dd 32           ; 左上(y)
@@ -173,6 +173,54 @@ ROSE_PARAM:
         at rose.color_curve_f,  dd 0x000F       ; カーブ表示色
         at rose.color_curve_b,  dd 0x0003       ; カーブ消去色
         at rose.title,          db "Task-4", 0  ; キャプション
+    iend
+.t05:
+    istruc rose 
+        at rose.x0,             dd 248          ; 左上(x)
+        at rose.y0,             dd 32           ; 左上(y)
+        at rose.width,          dd 200          ; 枠の幅
+        at rose.height,         dd 200          ; 枠の高さ
+        at rose.n,              dd 3            
+        at rose.d,              dd 1
+        at rose.color_font,     dd 0x030F       ; 文字色    
+        at rose.color_axis_x,   dd 0x0007       ; X軸の表示色
+        at rose.color_axis_y,   dd 0x0007       ; Y軸の表示色
+        at rose.color_frame,    dd 0x000F       ; 枠線の色
+        at rose.color_curve_f,  dd 0x000F       ; カーブ表示色
+        at rose.color_curve_b,  dd 0x0003       ; カーブ消去色
+        at rose.title,          db "Task-5", 0  ; キャプション
+    iend
+.t06:
+    istruc rose 
+        at rose.x0,             dd 32           ; 左上(x)
+        at rose.y0,             dd 272          ; 左上(y)
+        at rose.width,          dd 200          ; 枠の幅
+        at rose.height,         dd 200          ; 枠の高さ
+        at rose.n,              dd 2            
+        at rose.d,              dd 6
+        at rose.color_font,     dd 0x030F       ; 文字色    
+        at rose.color_axis_x,   dd 0x0007       ; X軸の表示色
+        at rose.color_axis_y,   dd 0x0007       ; Y軸の表示色
+        at rose.color_frame,    dd 0x000F       ; 枠線の色
+        at rose.color_curve_f,  dd 0x000F       ; カーブ表示色
+        at rose.color_curve_b,  dd 0x0003       ; カーブ消去色
+        at rose.title,          db "Task-5", 0  ; キャプション
+    iend
+.t07:
+    istruc rose 
+        at rose.x0,             dd 248          ; 左上(x)
+        at rose.y0,             dd 272          ; 左上(y)
+        at rose.width,          dd 200          ; 枠の幅
+        at rose.height,         dd 200          ; 枠の高さ
+        at rose.n,              dd 4            
+        at rose.d,              dd 6
+        at rose.color_font,     dd 0x030F       ; 文字色    
+        at rose.color_axis_x,   dd 0x0007       ; X軸の表示色
+        at rose.color_axis_y,   dd 0x0007       ; Y軸の表示色
+        at rose.color_frame,    dd 0x000F       ; 枠線の色
+        at rose.color_curve_f,  dd 0x000F       ; カーブ表示色
+        at rose.color_curve_b,  dd 0x0003       ; カーブ消去色
+        at rose.title,          db "Task-5", 0  ; キャプション
     iend
 
 ;********************************************************************************
