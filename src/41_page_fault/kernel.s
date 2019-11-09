@@ -84,8 +84,6 @@ kernel:
         cdecl draw_color_bar, 63, 4
 
 .EVENT_LOOP:
-;        jmp SS_TASK_01:0               ; 実行アドレスはTSS_01.eipを使用する
-
 .KEY_BUFF_BEGIN:
         ; ** キー入力を一つ消費する
         cdecl read_ring_buff, KEY_BUFF, .key

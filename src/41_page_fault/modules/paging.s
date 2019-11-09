@@ -11,8 +11,8 @@ init_page_table:
         ; ** 4MB分のページテーブルを構成する **
         cdecl set_4m_page, CR3_BASE
 
-        ; ** 0x107*4kB = 0x0010_7000に対するページエントリを無効にする **
-        mov [0x0010_6000 + 0x107 * 4], dword 0  
+        ; ** 0x109*4kB = ROSE_PARAMを配置する予定のページエントリを無効にする **
+        mov [CR3_BASE + CR3_BASE_SIZE + 0x109 * 4], dword 0  ; 0x0010_9000
 
 ;**** レジスタの復帰 **** 
         popa
