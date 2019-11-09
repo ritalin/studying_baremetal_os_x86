@@ -15,8 +15,12 @@ PROGRAM_LIST := $(patsubst %.img,%.list,$(PROGRAM))
 all: ;
 
 .PHONY: run
-run: src_40
+run: src_41
 	$(VM) -monitor stdio -m size=256 -drive file=$(PROGRAM),format=raw -boot order=c -rtc base=localtime
+
+.PHONY: src_41
+src_41:
+	$(MAKE) -B $(PROGRAM) PROJECT=$(SRC_DIR)/41_page_fault
 
 .PHONY: src_40
 src_40:
