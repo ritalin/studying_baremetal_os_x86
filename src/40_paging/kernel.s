@@ -65,6 +65,11 @@ kernel:
         ; ** ページテーブルを登録する **
         mov eax, CR3_BASE
         mov cr3, eax
+        ; ** ページングを有効化する **
+        mov eax, cr0
+        or eax, (1 << 31)                       ; CR0 |= PG
+        mov cr0, eax
+        jmp $ + 2                               ; 実行パイプラインの破棄
 
         sti
 
