@@ -9,7 +9,7 @@ TSS_00:                                 ; カーネル用タスク
 .ss1:       dd 0
 .esp2:      dd 0
 .ss2:       dd 0
-.cr3:       dd 0
+.cr3:       dd CR3_BASE
 .eip:       dd 0
 .eflags:    dd 0
 .eax:       dd 0
@@ -38,7 +38,7 @@ TSS_01:                                 ; テストタスク
 .ss1:       dd 0
 .esp2:      dd 0
 .ss2:       dd 0
-.cr3:       dd 0
+.cr3:       dd CR3_BASE
 .eip:       dd task_01                  ; "tasks/task_01.s"
 .eflags:    dd 0x_02_02
 .eax:       dd 0
@@ -68,7 +68,7 @@ TSS_02:                                 ; テストタスク2
 .ss1:       dd 0
 .esp2:      dd 0
 .ss2:       dd 0
-.cr3:       dd 0
+.cr3:       dd CR3_BASE
 .eip:       dd task_02                  ; "tasks/task_02.s"
 .eflags:    dd 0x_02_02
 .eax:       dd 0
@@ -97,7 +97,7 @@ TSS_03:                                 ; テストタスク3
 .ss1:       dd 0
 .esp2:      dd 0
 .ss2:       dd 0
-.cr3:       dd 0
+.cr3:       dd CR3_BASE
 .eip:       dd task_03                  ; "tasks/task_03.s"
 .eflags:    dd 0x_02_02
 .eax:       dd 0
@@ -126,7 +126,7 @@ TSS_04:                                 ; テストタスク4
 .ss1:       dd 0
 .esp2:      dd 0
 .ss2:       dd 0
-.cr3:       dd 0
+.cr3:       dd CR3_BASE
 .eip:       dd task_04                  ; "tasks/task_04.s"
 .eflags:    dd 0x_02_02
 .eax:       dd 0

@@ -26,24 +26,26 @@ kernel:
         set_desc GDT.tss_03, TSS_03
         set_desc GDT.tss_04, TSS_04
 
-        ; ** GDTにコールゲートアドレスを設定する
+        ; ** GDTにコールゲートアドレスを設定する **
         set_call_gate_desc GDT.call_gate, call_gate
 
-        ; ** GDTにLDTのアドレスを設定する
+        ; ** GDTにLDTのアドレスを設定する **
         set_desc GDT.ldt, LDT, word LDT_LIMIT   ; LDTの上限数は64k (LDTRが16bitのため)
 
-        ; ** GDTRをリロードする
+        ; ** GDTRをリロードする **
         lgdt [GDTR]
 
-        ; ** カーネルタスクに載せる
+        ; ** カーネルタスクに載せる **
         mov esp, SP_TASK_00
         mov ax, SS_TASK_00
         ltr ax
 
-        ; ** IDTRを初期化する
+        ; ** IDTRを初期化する **
         cdecl init_int
-        ; ** PICを初期化する
+        ; ** PICを初期化する **
         cdecl init_pic
+        ; ** ページテーブルを初期化する ** 
+        cdecl init_page_table
 
         cdecl enable_rtc_int, 0x10              ; 更新サイクル終了割り込み(UIE)を許可する
         cdecl enable_int_timer0
@@ -59,6 +61,10 @@ kernel:
         ; ** IMR(割り込みマスクレジスタ)の設定
         outp 0x21, 0b_1111_1000                 ; スレーブPICを有効にする
         outp 0xA1, 0b_1111_1110                 ; RTCの割り込みを有効にする
+
+        ; ** ページテーブルを登録する **
+        mov eax, CR3_BASE
+        mov cr3, eax
 
         sti
 
@@ -112,6 +118,7 @@ RTC_TIME:
 ; 割り込み
 ;********************************************************************************
 %include "modules/int_timer.s"
+%include "modules/paging.s"
 
 ;********************************************************************************
 ; モジュール
