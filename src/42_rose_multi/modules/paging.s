@@ -12,7 +12,7 @@ init_page_table:
         cdecl set_4m_page, CR3_BASE
 
         ; ** 0x107*4kB = 0x0010_7000に対するページエントリを無効にする **
-        mov [0x0010_6000 + 0x107 * 4], dword 0  
+        mov [CR3_BASE + CR3_BASE_SIZE + 0x107 * 4], dword 0  
 
 ;**** レジスタの復帰 **** 
         popa

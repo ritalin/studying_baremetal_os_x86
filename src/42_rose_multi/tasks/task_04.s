@@ -158,11 +158,12 @@ task_04:
 
 ALIGN 4, db 0
 ROSE_PARAM:
+.t4:
     istruc rose 
-        at rose.x0,             dd 16           ; 左上(x)
+        at rose.x0,             dd 32           ; 左上(x)
         at rose.y0,             dd 32           ; 左上(y)
-        at rose.width,          dd 400          ; 枠の幅
-        at rose.height,         dd 400          ; 枠の高さ
+        at rose.width,          dd 200          ; 枠の幅
+        at rose.height,         dd 200          ; 枠の高さ
         at rose.n,              dd 2            
         at rose.d,              dd 1
         at rose.color_font,     dd 0x030F       ; 文字色    
