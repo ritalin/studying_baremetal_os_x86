@@ -157,6 +157,8 @@ RTC_TIME:
 %include "modules/protect/int_nm.s"
 %include "modules/protect/wait_tick.s"
 
+%include "modules/protect/memcpy.s"
+
 ;********************************************************************************
 ; パディング(8kB)
 ;********************************************************************************
