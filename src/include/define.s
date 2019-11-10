@@ -37,7 +37,9 @@ STACK_BASE equ 0x0010_4000
 STACK_SIZE equ 1024
 
 CR3_BASE  equ 0x0010_7000                       ; ページディレクトリの先頭アドレス
-CR3_BASE_SIZE equ 0x1000                        ; ページディレクトリのサイズ(4K)
+CR3_PDE_SIZE equ 0x1000
+CR3_PTE_SIZE equ 0x1000
+CR3_SIZE equ (CR3_PDE_SIZE + CR3_PTE_SIZE)
 
 RING_ITEM_SIZE equ (1 << 4)                     ; リングバッファサイズ
 RING_INDEX_MASK equ (RING_ITEM_SIZE - 1)
@@ -52,15 +54,13 @@ SP_TASK_05 equ (STACK_BASE + (STACK_SIZE * 6))          ; タスク5用スタッ
 SP_TASK_06 equ (STACK_BASE + (STACK_SIZE * 7))          ; タスク6用スタックアドレス
 SP_TASK_07 equ (STACK_BASE + (STACK_SIZE * 8))          ; タスク7用スタックアドレス
 
-PARAM_TASK_04 equ (CR3_BASE + CR3_BASE_SIZE)            ; タスク4用描画パラメータ
-PARAM_TASK_05 equ (CR3_BASE + CR3_BASE_SIZE + 0x1000)   ; タスク5用描画パラメータ
-PARAM_TASK_06 equ (CR3_BASE + CR3_BASE_SIZE + 0x2000)   ; タスク6用描画パラメータ
-PARAM_TASK_07 equ (CR3_BASE + CR3_BASE_SIZE + 0x3000)   ; タスク7用描画パラメータ
+PARAM_TASK_04 equ (CR3_BASE + CR3_SIZE * 0 + CR3_PDE_SIZE)  ; タスク4用描画パラメータ
+PARAM_TASK_05 equ (CR3_BASE + CR3_SIZE * 1 + CR3_PDE_SIZE)  ; タスク5用描画パラメータ
+PARAM_TASK_06 equ (CR3_BASE + CR3_SIZE * 2 + CR3_PDE_SIZE)  ; タスク6用描画パラメータ
+PARAM_TASK_07 equ (CR3_BASE + CR3_SIZE * 3 + CR3_PDE_SIZE)  ; タスク7用描画パラメータ
 
-TASK_PAGE_BASE equ 0x0020_0000                                  ; タスク用PDEのベースアドレス
-TASK_PDE_SIZE equ 0x1000
-TASK_PTE_SIZE equ 0x1000
+TASK_PAGE_BASE equ 0x0020_0000                              ; タスク用PDEのベースアドレス
 
-CR3_TASK_05 equ (TASK_PAGE_BASE)                                ; タスク5用PDEの先頭アドレス    
-CR3_TASK_06 equ (CR3_TASK_05 + TASK_PDE_SIZE + TASK_PTE_SIZE)   ; タスク6用PDEの先頭アドレス
-CR3_TASK_07 equ (CR3_TASK_06 + TASK_PDE_SIZE + TASK_PTE_SIZE)   ; タスク7用PDEの先頭アドレス
+CR3_TASK_05 equ (TASK_PAGE_BASE + CR3_SIZE * 0)             ; タスク5用PDEの先頭アドレス    
+CR3_TASK_06 equ (TASK_PAGE_BASE + CR3_SIZE * 1)             ; タスク6用PDEの先頭アドレス
+CR3_TASK_07 equ (TASK_PAGE_BASE + CR3_SIZE * 2)             ; タスク7用PDEの先頭アドレス

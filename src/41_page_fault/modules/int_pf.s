@@ -20,7 +20,7 @@ int_pf:
         cmp eax, 0x0010_9000
         jne .PAGING_FAILED
 
-        mov [CR3_BASE + CR3_BASE_SIZE + 0x109 * 4], dword 0x0010_9007    ; ページを有効化にする
+        mov [CR3_BASE + CR3_PDE_SIZE + 0x109 * 4], dword 0x0010_9007    ; ページを有効化にする
         cdecl memcpy, 0x0010_9000, ROSE_PARAM, rose_size    ; ローズパラメータをコピーする
 
 ;**** レジスタの復帰 **** 
