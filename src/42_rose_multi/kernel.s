@@ -25,6 +25,7 @@ kernel:
         set_desc GDT.tss_02, TSS_02
         set_desc GDT.tss_03, TSS_03
         set_desc GDT.tss_04, TSS_04
+        set_desc GDT.tss_05, TSS_05
 
         ; ** GDTにコールゲートアドレスを設定する **
         set_call_gate_desc GDT.call_gate, call_gate

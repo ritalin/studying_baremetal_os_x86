@@ -147,6 +147,35 @@ TSS_04:                                 ; テストタスク4
 .io:        dd 0
 .fp_save:   times 108 + 4 dd 0          ; FPUコンテキスト保存領域
 
+TSS_05:                                 ; テストタスク5
+.link:      dd 0
+.esp0:      dd SP_TASK_05 - 512         ; リング0
+.ss0:       dd DS_KERNEL
+.esp1:      dd 0
+.ss1:       dd 0
+.esp2:      dd 0
+.ss2:       dd 0
+.cr3:       dd CR3_TASK_05
+.eip:       dd task_04                  ; "tasks/task_04.s"
+.eflags:    dd 0x_02_02
+.eax:       dd 0
+.ecx:       dd 0
+.edx:       dd 0
+.ebx:       dd 0
+.esp:       dd SP_TASK_05
+.ebp:       dd 0
+.esi:       dd 0
+.edi:       dd 0
+.es:        dd DS_TASK_05
+.cs:        dd CS_TASK_04
+.ss:        dd DS_TASK_05
+.ds:        dd DS_TASK_05
+.fs:        dd DS_TASK_05
+.gs:        dd DS_TASK_05
+.ldt:       dd SS_LDT
+.io:        dd 0
+.fp_save:   times 108 + 4 dd 0          ; FPUコンテキスト保存領域
+
 ;********************************************************************************
 ; グローバルデスクリプタ
 ;********************************************************************************
@@ -159,6 +188,7 @@ GDT:        dq 00_0_0_0_0_00_0000_00_00h    ; NULL
 .tss_02:    dq 00_0_0_8_9_00_0000_00_67h    ; タスク2(リミットはTSSの最小サイズ)
 .tss_03:    dq 00_0_0_8_9_00_0000_00_67h    ; タスク3(リミットはTSSの最小サイズ)
 .tss_04:    dq 00_0_0_8_9_00_0000_00_67h    ; タスク4(リミットはTSSの最小サイズ)
+.tss_05:    dq 00_0_0_8_9_00_0000_00_67h    ; タスク5(リミットはTSSの最小サイズ)
 .call_gate: dq 00_0_0_E_C_04_0008_00_00h    ; コールゲート(draw_str, 引数=4, DPL=3, SEL=8)
 .gdt_end:
 
@@ -172,6 +202,7 @@ SS_TASK_01  equ GDT.tss_01 - GDT        ; タスク1のオフセット
 SS_TASK_02  equ GDT.tss_02 - GDT        ; タスク2のオフセット
 SS_TASK_03  equ GDT.tss_03 - GDT        ; タスク3のオフセット
 SS_TASK_04  equ GDT.tss_04 - GDT        ; タスク4のオフセット
+SS_TASK_05  equ GDT.tss_05 - GDT        ; タスク5のオフセット
 SS_GATE_00  equ GDT.call_gate - GDT     ; コールゲートへのオフセット
 
 ;********************************************************************************
@@ -188,6 +219,7 @@ LDT:        dq 00_0_0_0_0_000000_0000h  ; NULL
 .ds_taks_03:dq 00_C_F_F_2_000000_FFFFh  ; タスク3用(DATA)
 .cs_taks_04:dq 00_C_F_F_A_000000_FFFFh  ; タスク4用(CODE)
 .ds_taks_04:dq 00_C_F_F_2_000000_FFFFh  ; タスク4用(DATA)
+.ds_taks_05:dq 00_C_F_F_2_000000_FFFFh  ; タスク5用(DATA)
 .ldt_end:
 
 LDT_LIMIT   equ LDT.ldt_end - LDT
@@ -199,3 +231,4 @@ CS_TASK_03  equ (LDT.cs_taks_03 - LDT) | 4 | 3
 DS_TASK_03  equ (LDT.ds_taks_03 - LDT) | 4 | 3
 CS_TASK_04  equ (LDT.cs_taks_04 - LDT) | 4 | 3
 DS_TASK_04  equ (LDT.ds_taks_04 - LDT) | 4 | 3
+DS_TASK_05  equ (LDT.ds_taks_05 - LDT) | 4 | 3

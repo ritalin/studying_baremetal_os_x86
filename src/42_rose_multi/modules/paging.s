@@ -10,9 +10,16 @@ init_page_table:
 ;**** 処理の開始 ****
         ; ** 4MB分のページテーブルを構成する **
         cdecl set_4m_page, CR3_BASE
+        cdecl set_4m_page, CR3_TASK_05
 
         ; ** 0x109*4kB = ROSE_PARAMを配置する予定のページエントリを無効にする **
-        mov [CR3_BASE + CR3_BASE_SIZE + 0x109 * 4], dword 0  ; 0x0010_9000
+        mov [CR3_BASE + CR3_PDE_SIZE + 0x109 * 4], dword 0  ; 0x0010_9000
+
+        ; ** アドレス変換を設定する *:
+        mov [CR3_TASK_PTE_05 + 0x109 * 4], dword (PARAM_TASK_04 + 0b0111)
+
+        ; ** 描画パラメータを設定する **
+        cdecl memcpy, PARAM_TASK_04, ROSE_PARAM, rose_size
 
 ;**** レジスタの復帰 **** 
         popa

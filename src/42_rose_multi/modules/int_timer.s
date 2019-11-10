@@ -35,6 +35,9 @@ int_timer:
 
         cmp ax, SS_TASK_04
         je .TASK_04
+
+        cmp ax, SS_TASK_05
+        je .TASK_05
         
 .TASK_00:
         jmp SS_TASK_01:0
@@ -49,7 +52,11 @@ int_timer:
         jmp SS_TASK_04:0
         jmp .TASK_SWICTH_END
 .TASK_04:
+        jmp SS_TASK_05:0
+        jmp .TASK_SWICTH_END
+.TASK_05:
         jmp SS_TASK_00:0
+        
 .TASK_SWICTH_END:
 
 ;**** レジスタの復帰 **** 
