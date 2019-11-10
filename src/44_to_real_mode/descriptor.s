@@ -240,6 +240,8 @@ TSS_07:                                 ; テストタスク7
 GDT:        dq 00_0_0_0_0_00_0000_00_00h    ; NULL
 .cs_kernel: dq 00_C_F_9_A_00_0000_FF_FFh    ; CODE(4GB)
 .ds_kernel: dq 00_C_F_9_2_00_0000_FF_FFh    ; DATA(4GB) 
+.cs_bit16:  dq 00_0_F_9_A_00_0000_FF_FFh    ; リアルモード用 (CODE) - 0x0018
+.ds_bit16:  dq 00_C_F_9_2_00_0000_FF_FFh    ; リアルモード用 (DATA) - 0x0020
 .ldt:       dq 00_0_0_8_2_00_0000_00_00h    ; 
 .tss_00:    dq 00_0_0_8_9_00_0000_00_67h    ; カーネルタスク用(リミットはTSSの最小サイズ)
 .tss_01:    dq 00_0_0_8_9_00_0000_00_67h    ; タスク1(リミットはTSSの最小サイズ)
@@ -255,17 +257,19 @@ GDT:        dq 00_0_0_0_0_00_0000_00_00h    ; NULL
 GDTR:       dw GDT.gdt_end - GDT        ; ディスクリプタデーブルのリミット
             dd GDT                      ; ディスクリプタテーブルのアドレス
 
-DS_KERNEL   equ GDT.ds_kernel - GDT     ; カーネルデータセグメントのオフセット
-SS_LDT      equ GDT.ldt - GDT           ; LDTデスクリプタのオフセット
-SS_TASK_00  equ GDT.tss_00 - GDT        ; カーネルタスクのオフセット
-SS_TASK_01  equ GDT.tss_01 - GDT        ; タスク1のオフセット
-SS_TASK_02  equ GDT.tss_02 - GDT        ; タスク2のオフセット
-SS_TASK_03  equ GDT.tss_03 - GDT        ; タスク3のオフセット
-SS_TASK_04  equ GDT.tss_04 - GDT        ; タスク4のオフセット
-SS_TASK_05  equ GDT.tss_05 - GDT        ; タスク5のオフセット
-SS_TASK_06  equ GDT.tss_06 - GDT        ; タスク6のオフセット
-SS_TASK_07  equ GDT.tss_07 - GDT        ; タスク7のオフセット
-SS_GATE_00  equ GDT.call_gate - GDT     ; コールゲートへのオフセット
+DS_KERNEL   equ (GDT.ds_kernel - GDT)   ; カーネルデータセグメントのオフセット
+CS_REAL     equ (GDT.cs_bit16 - GDT)    ; リアルモード用コードセグメントのオフセット
+DS_REAL     equ (GDT.ds_bit16 - GDT)    ; リアルモード用データセグメントのオフセット
+SS_LDT      equ (GDT.ldt - GDT)         ; LDTデスクリプタのオフセット
+SS_TASK_00  equ (GDT.tss_00 - GDT)      ; カーネルタスクのオフセット
+SS_TASK_01  equ (GDT.tss_01 - GDT)      ; タスク1のオフセット
+SS_TASK_02  equ (GDT.tss_02 - GDT)      ; タスク2のオフセット
+SS_TASK_03  equ (GDT.tss_03 - GDT)      ; タスク3のオフセット
+SS_TASK_04  equ (GDT.tss_04 - GDT)      ; タスク4のオフセット
+SS_TASK_05  equ (GDT.tss_05 - GDT)      ; タスク5のオフセット
+SS_TASK_06  equ (GDT.tss_06 - GDT)      ; タスク6のオフセット
+SS_TASK_07  equ (GDT.tss_07 - GDT)      ; タスク7のオフセット
+SS_GATE_00  equ (GDT.call_gate - GDT)   ; コールゲートへのオフセット
 
 ;********************************************************************************
 ; ローカルデスクリプタ
