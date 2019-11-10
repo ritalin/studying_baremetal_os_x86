@@ -98,14 +98,15 @@ kernel:
 
         ; ** リアルモードへの移行を試みる **
 .TO_REAL_MODE_BEGIN:
-        cdecl draw_str, 0, 0, 0x0000, .s2        ; 文字の消去
+        cdecl draw_str, 0, 0, 0x0000, .s1        ; 文字の消去
 
         cmp al, 0x02            ; 1が押下された場合
         jne .TO_REAL_MODE_END
 
         call [BOOT_END - 16] 
 
-        cdecl draw_str, 0, 0, 0xF04, .s1
+        mov esi, BOOT_LOAD + SECT_SIZE + font_size
+        cdecl draw_str, 0, 0, 0xF04, esi
 .TO_REAL_MODE_END:
 
         ; ** キー履歴を表示する
@@ -120,8 +121,7 @@ kernel:
         jmp .EVENT_LOOP
 
 .s0:    db " Hello, Kernel! ", 0
-.s1:    db "Key PRESSED", 0
-.s2:    db "           ", 0
+.s1:    db "                                ", 0; 32文字のバッファ(文字消去用)
 .key:   dd 0                                    ; 取得したキーの保存先
 
 ALIGN 4, db 0

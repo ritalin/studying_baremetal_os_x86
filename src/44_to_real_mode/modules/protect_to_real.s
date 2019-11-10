@@ -33,7 +33,7 @@ to_real_mode:
 
         ; ** リアルモードへ移行する **
         mov eax, cr0
-        and eax, ~((1 << 31) | (1))         ; eax &= ~(PG | PE)
+        and eax, ~((1 << 0x1F) | (1))         ; eax &= ~(PG | PE)
         mov cr0, eax
         jmp $ + 2                           ; 先読みをクリア
 
@@ -44,30 +44,30 @@ to_real_mode:
         mov ds, ax                          ; DS = 0x0000
         mov es, ax                          ; ES = 0x0000
         mov ss, ax                          ; SS = 0x0000
-        mov sp, 0x7C00
+        mov esp, dword 0x7C00               ; 上位16Bitは0埋め
 
         ; ** ファイルを読み込む **
-        ; (TBD)
+        cdecl read_sample_file
 
         ; ** 16Bitプロテクトモードへ移行する
         mov eax, cr0
-        or eax, 1                           ; eax |= PE
+        or eax, 1                                   ; eax |= PE
         mov cr0, eax
-        jmp $ + 2                           ; 先読みをクリア
+        jmp $ + 2                                   ; 先読みをクリア
 
         ; ** 32Bitプロテクトモードへ移行する
-        db 0x66                             ; 32bitオーバライドプレフィックス
+        db 0x66                                     ; 32bitオーバライドプレフィックス
 [BITS 32]
-        jmp 0x0008:.bit_32                  ; 32ビットカーネル用コードセグメントに変更
+        jmp 0x0008:.bit_32                          ; 32ビットカーネル用コードセグメントに変更
 .bit_32:
-        mov ax, 0x0010                      ; 32ビットカーネル用データセグメント
+        mov ax, 0x0010                              ; 32ビットカーネル用データセグメント
         mov ds, ax
         mov es, ax
         mov ss, ax
 
         ; ** レジスタ設定を復帰させる *:
         mov esp, [.esp_saved]
-        mov eax, [.cr0_saved]               ; 保存されたCR0を復帰させることで自動的にPGも復帰
+        mov eax, [.cr0_saved]                       ; 保存されたCR0を復帰させることで自動的にPGも復帰
         mov cr0, eax
         lidt [.idtr_saved]
 
