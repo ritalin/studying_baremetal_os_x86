@@ -86,15 +86,31 @@ kernel:
         ; ** カラーバーを出力する
         cdecl draw_color_bar, 63, 4
 
+        cdecl read_ring_buff, KEY_BUFF, .key
+
 .EVENT_LOOP:
 .KEY_BUFF_BEGIN:
         ; ** キー入力を一つ消費する
         cdecl read_ring_buff, KEY_BUFF, .key
+        mov eax, [.key]
         cmp eax, 0
         je .KEY_BUF_END
 
+        ; ** リアルモードへの移行を試みる **
+.TO_REAL_MODE_BEGIN:
+        cdecl draw_str, 0, 0, 0x0000, .s2        ; 文字の消去
+
+        cmp al, 0x02            ; 1が押下された場合
+        jne .TO_REAL_MODE_END
+
+        call [BOOT_END - 16] 
+
+        cdecl draw_str, 0, 0, 0xF04, .s1
+.TO_REAL_MODE_END:
+
         ; ** キー履歴を表示する
-        cdecl draw_key, 2, 29, KEY_BUFF        
+        cdecl draw_key, 2, 29, KEY_BUFF       
+
 .KEY_BUF_END:
         
         ; ** 回転バーを表示する
@@ -104,6 +120,8 @@ kernel:
         jmp .EVENT_LOOP
 
 .s0:    db " Hello, Kernel! ", 0
+.s1:    db "Key PRESSED", 0
+.s2:    db "           ", 0
 .key:   dd 0                                    ; 取得したキーの保存先
 
 ALIGN 4, db 0
