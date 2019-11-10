@@ -69,4 +69,17 @@ CR3_TASK_PTE_05 equ (TASK_PAGE_BASE + CR3_SIZE * 0 + CR3_PTE_SIZE)  ; タスク5
 CR3_TASK_PTE_06 equ (TASK_PAGE_BASE + CR3_SIZE * 1 + CR3_PTE_SIZE)  ; タスク6用PDEの先頭アドレス
 CR3_TASK_PTE_07 equ (TASK_PAGE_BASE + CR3_SIZE * 2 + CR3_PTE_SIZE)  ; タスク7用PDEの先頭アドレス
 
+; *****************************************************************************
+; FAT16定数定義
+; *****************************************************************************
 
+FAT_SIZE equ (128 * 1024)                                   ; 1つ当たりのFAT領域のサイズ = 最大クラスタ数(65535) * 2byte
+FAT_ROOT_DIR_SIZE equ (512 * 32)                            ; ルートディレクトリサイズ = ルートディレクトリ数(512) * 32byte
+
+FAT1_OFFSET equ (KERNEL_SIZE)                               ; kernelの後続にFAT1領域を配置する
+FAT2_OFFSET equ (FAT1_OFFSET + FAT_SIZE)                    ; FAT1領域の後続にFAT2領域を配置する
+FAT_ROOT_OFFSET equ (FAT2_OFFSET + FAT_SIZE)                ; FAT2領域の後続にルートディレクトリ領域を配置する
+FAT_FILE_OFFSET equ (FAT_ROOT_OFFSET + FAT_ROOT_DIR_SIZE)   ; ルートディレクトリ領域の後続にデータ領域を配置する
+
+FAT_ATTR_VOLUME_ID equ (1 << 3)
+FAT_ATTR_ARCHIVE   equ (1 << 5)
