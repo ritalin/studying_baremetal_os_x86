@@ -64,3 +64,9 @@ TASK_PAGE_BASE equ 0x0020_0000                              ; タスク用PDEの
 CR3_TASK_05 equ (TASK_PAGE_BASE + CR3_SIZE * 0)             ; タスク5用PDEの先頭アドレス    
 CR3_TASK_06 equ (TASK_PAGE_BASE + CR3_SIZE * 1)             ; タスク6用PDEの先頭アドレス
 CR3_TASK_07 equ (TASK_PAGE_BASE + CR3_SIZE * 2)             ; タスク7用PDEの先頭アドレス
+
+CR3_TASK_PTE_05 equ (TASK_PAGE_BASE + CR3_SIZE * 0 + CR3_PTE_SIZE)  ; タスク5用PDEの先頭アドレス    
+CR3_TASK_PTE_06 equ (TASK_PAGE_BASE + CR3_SIZE * 1 + CR3_PTE_SIZE)  ; タスク6用PDEの先頭アドレス
+CR3_TASK_PTE_07 equ (TASK_PAGE_BASE + CR3_SIZE * 2 + CR3_PTE_SIZE)  ; タスク7用PDEの先頭アドレス
+
+
