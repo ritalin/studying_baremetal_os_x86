@@ -21,7 +21,7 @@ int_pf:
         jne .PAGING_FAILED
 
         mov [CR3_BASE + CR3_PDE_SIZE + 0x109 * 4], dword 0x0010_9007    ; ページを有効化にする
-        cdecl memcpy, 0x0010_9000, ROSE_PARAM.t05, rose_size            ; ローズパラメータをコピーする
+        cdecl memcpy, 0x0010_9000, ROSE_PARAM.t04, rose_size            ; ローズパラメータをコピーする
 
 ;**** レジスタの復帰 **** 
         pop es

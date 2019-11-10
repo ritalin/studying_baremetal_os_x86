@@ -11,15 +11,21 @@ init_page_table:
         ; ** 4MB分のページテーブルを構成する **
         cdecl set_4m_page, CR3_BASE
         cdecl set_4m_page, CR3_TASK_05
+        cdecl set_4m_page, CR3_TASK_06
+        cdecl set_4m_page, CR3_TASK_07
 
         ; ** 0x109*4kB = ROSE_PARAMを配置する予定のページエントリを無効にする **
         mov [CR3_BASE + CR3_PDE_SIZE + 0x109 * 4], dword 0  ; 0x0010_9000
 
         ; ** アドレス変換を設定する *:
-        mov [CR3_TASK_PTE_05 + 0x109 * 4], dword (PARAM_TASK_04 + 0b0111)
+        mov [CR3_TASK_PTE_05 + 0x109 * 4], dword (PARAM_TASK_05 + 0b0111)
+        mov [CR3_TASK_PTE_06 + 0x109 * 4], dword (PARAM_TASK_06 + 0b0111)
+        mov [CR3_TASK_PTE_07 + 0x109 * 4], dword (PARAM_TASK_07 + 0b0111)
 
         ; ** 描画パラメータを設定する **
-        cdecl memcpy, PARAM_TASK_04, ROSE_PARAM, rose_size
+        cdecl memcpy, PARAM_TASK_05, ROSE_PARAM.t05, rose_size
+        cdecl memcpy, PARAM_TASK_06, ROSE_PARAM.t06, rose_size
+        cdecl memcpy, PARAM_TASK_07, ROSE_PARAM.t07, rose_size
 
 ;**** レジスタの復帰 **** 
         popa
