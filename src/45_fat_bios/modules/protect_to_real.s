@@ -46,8 +46,18 @@ to_real_mode:
         mov ss, ax                          ; SS = 0x0000
         mov esp, dword 0x7C00               ; 上位16Bitは0埋め
 
+        ; ** BIOSの割り込み設定を再現する **
+        cdecl set_bios_interrupts
+
+        sti
+
         ; ** ファイルを読み込む **
         cdecl read_sample_file
+
+        cli
+
+        ; ** カーネルの割り込み設定に復帰させる **
+        cdecl revert_kernel_interrpts
 
         ; ** 16Bitプロテクトモードへ移行する
         mov eax, cr0
@@ -91,3 +101,46 @@ to_real_mode:
         dd 0
 .esp_saved:
         dd 0
+
+;********************************************************************************
+; void set_bios_interrupts()
+;********************************************************************************
+[BITS 16]
+set_bios_interrupts:
+;**** スタックフレームの構築 **** 
+                            ;     +4| EIP (caller)
+        push ebp            ; EBP  0| EBP (old)
+        mov ebp, esp
+
+;**** レジスタの保存 **** 
+
+;**** 処理の開始 ****
+
+;**** レジスタの復帰 **** 
+
+;**** スタックフレームの破棄 ****
+        mov esp, ebp
+        pop ebp
+        ret
+
+;********************************************************************************
+; void revert_kernel_interrpts()
+;********************************************************************************
+[BITS 32]
+revert_kernel_interrpts:
+;**** スタックフレームの構築 **** 
+                            ;     +4| EIP (caller)
+        push ebp            ; EBP  0| EBP (old)
+        mov ebp, esp
+
+;**** レジスタの保存 **** 
+
+;**** 処理の開始 ****
+
+;**** レジスタの復帰 **** 
+
+;**** スタックフレームの破棄 ****
+        mov esp, ebp
+        pop ebp
+        ret
+

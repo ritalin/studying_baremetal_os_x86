@@ -10,10 +10,8 @@ read_sample_file:
 
 ;**** レジスタの保存 **** 
 
-;**** ローカル変数 **** 
-        cdecl memcpy16, SEARCH_RESULT, .s0, .s1 - .s0
-
 ;**** 処理の開始 ****
+        cdecl memcpy16, SEARCH_RESULT, .s0, .s1 - .s0  
 
 ;**** レジスタの復帰 **** 
 
@@ -22,5 +20,5 @@ read_sample_file:
         pop bp
         ret
 
-.s0:    db "File not found...               ", 0    ; 最大32文字の文字列バッファ
+.s0:    db "File not found..?               ", 0    ; 最大32文字の文字列バッファ
 .s1:
