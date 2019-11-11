@@ -1,3 +1,5 @@
+ROOT_DIR_SECT equ (40 + 256 + 256)
+
 ;********************************************************************************
 ; void read_sample_file()
 ;********************************************************************************
@@ -30,7 +32,8 @@ read_sample_file:
 
 .READ_FILE_BEGIN:
         ; ** ファイル内容を読み込む **
-        cdecl memcpy16, SEARCH_RESULT, .s4, .s5 - .s4  
+        add ax, ROOT_DIR_SECT + 32 - 2              ; セクタ位置にオフセットを負わせる
+        cdecl read_lba, BOOT, ax, 1, SEARCH_RESULT
         jmp .SEARCH_END   
 
 .READ_FILE_END:
