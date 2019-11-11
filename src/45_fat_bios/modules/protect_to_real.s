@@ -113,10 +113,26 @@ set_bios_interrupts:
         mov ebp, esp
 
 ;**** レジスタの保存 **** 
+        push ax
 
 ;**** 処理の開始 ****
+        ; ** 割り込みマスクを設定する
+        outp 0x20, 0x11             ; MASTER.ICW1
+        outp 0x21, 0x08             ; MASTER.ICW2 <- 割り込みベクタ
+        outp 0x21, 0x04             ; MASTER.ICW3
+        outp 0x21, 0x01             ; MASTER.ICW4
+
+        outp 0xA0, 0x11             ; SLAVE.ICW1
+        outp 0xA1, 0x10             ; SLAVE.ICW2 <- 割り込みベクタ
+        outp 0xA1, 0x02             ; SLAVE.ICW3
+        outp 0xA1, 0x01             ; SLAVE.ICW4
+
+        ; ** PIC割り込みマスクを設定する
+        outp 0x21, 1011_1000b       ; FDD / スレーブPIC / KBC / タイマーの有効化
+        outp 0xA1, 1011_1111b       ; HDDの有効化
 
 ;**** レジスタの復帰 **** 
+        pop ax
 
 ;**** スタックフレームの破棄 ****
         mov esp, ebp
@@ -134,10 +150,26 @@ revert_kernel_interrpts:
         mov ebp, esp
 
 ;**** レジスタの保存 **** 
+        push ax
 
 ;**** 処理の開始 ****
+        ; ** 割り込みマスクを設定する
+        outp 0x20, 0x11             ; MASTER.ICW1
+        outp 0x21, 0x20             ; MASTER.ICW2 <- 割り込みベクタ
+        outp 0x21, 0x04             ; MASTER.ICW3
+        outp 0x21, 0x01             ; MASTER.ICW4
+
+        outp 0xA0, 0x11             ; SLAVE.ICW1
+        outp 0xA1, 0x28             ; SLAVE.ICW2 <- 割り込みベクタ
+        outp 0xA1, 0x02             ; SLAVE.ICW3
+        outp 0xA1, 0x01             ; SLAVE.ICW4
+
+        ; ** PIC割り込みマスクを設定する
+        outp 0x21, 1111_1000b       ; スレーブPIC / KBC / タイマーの有効化
+        outp 0xA1, 1111_1110b       ; RTCの有効化
 
 ;**** レジスタの復帰 **** 
+        pop ax
 
 ;**** スタックフレームの破棄 ****
         mov esp, ebp
