@@ -200,6 +200,7 @@ stage_4:
 
 %include "modules/real/read_lba.s"
 %include "modules/real/memcpy16.s"
+%include "modules/real/memcmp16.s"
 %include "modules/read_sample_file16.s"
 
 ;********************************************************************************
